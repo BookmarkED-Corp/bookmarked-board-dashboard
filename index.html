@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bookmarked Inc. — Board Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rust: #B12A0A;
+  --rust-light: #D4431E;
+  --teal: #12A38C;
+  --teal-light: #1CC9AE;
+  --ink: #101828;
+  --ink-light: #344054;
+  --gray-25: #FCFCFD;
+  --gray-50: #F9FAFB;
+  --gray-100: #F2F4F7;
+  --gray-200: #EAECF0;
+  --gray-300: #D0D5DD;
+  --gray-500: #667085;
+  --gray-600: #475467;
+  --gray-700: #344054;
+  --gray-900: #101828;
+  --green: #039855;
+  --green-light: #D1FADF;
+  --yellow: #DC6803;
+  --yellow-light: #FEF0C7;
+  --red: #D92D20;
+  --red-light: #FEE4E2;
+  --blue: #175CD3;
+  --blue-light: #D1E9FF;
+  --shadow-sm: 0 1px 2px rgba(16,24,40,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(16,24,40,0.08), 0 2px 4px -2px rgba(16,24,40,0.05);
+  --shadow-lg: 0 12px 16px -4px rgba(16,24,40,0.08), 0 4px 6px -2px rgba(16,24,40,0.03);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  background: var(--gray-50);
+  color: var(--ink);
+  line-height: 1.5;
+}
+.dashboard { max-width: 1440px; margin: 0 auto; padding: 24px; }
+
+/* Header */
+.header {
+  background: var(--ink);
+  color: white;
+  padding: 20px 24px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px;
+  margin: 0;
+}
+.header .subtitle {
+  font-size: 14px;
+  color: var(--gray-500);
+  margin-top: 4px;
+}
+.header .updated {
+  font-size: 13px;
+  color: var(--gray-500);
+  text-align: right;
+}
+.header .badge {
+  display: inline-block;
+  background: var(--teal);
+  color: white;
+  padding: 2px 10px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Section titles */
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--ink);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-title .count {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-500);
+  background: var(--gray-100);
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+
+/* KPI Grid */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.kpi-card {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: 10px;
+  padding: 16px 20px;
+  box-shadow: var(--shadow-sm);
+}
+.kpi-card .label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.kpi-card .value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.kpi-card .sub {
+  font-size: 13px;
+  color: var(--gray-500);
+  margin-top: 4px;
+}
+.kpi-card .trend {
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 2px;
+}
+.kpi-card .trend.up { color: var(--green); }
+.kpi-card .trend.down { color: var(--red); }
+.kpi-card .trend.neutral { color: var(--yellow); }
+.kpi-card.highlight {
+  border-left: 4px solid var(--teal);
+}
+.kpi-card.rust-border {
+  border-left: 4px solid var(--rust);
+}
+.kpi-card .gauge-bar {
+  height: 6px;
+  background: var(--gray-200);
+  border-radius: 4px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+.kpi-card .gauge-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--teal);
+  transition: width 0.5s;
+}
+.kpi-card .gauge-fill.rust { background: var(--rust); }
+
+/* Card */
+.card {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.card-header h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.card-body { padding: 16px 20px; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  text-align: left;
+  padding: 10px 12px;
+  font-weight: 600;
+  color: var(--gray-600);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--gray-100);
+  white-space: nowrap;
+}
+td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--gray-100);
+  color: var(--ink);
+  vertical-align: middle;
+}
+tr:hover { background: var(--gray-25); }
+.amount { font-weight: 600; text-align: right; white-space: nowrap; }
+
+/* Status badges */
+.badge-pill {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.bg-green { background: var(--green-light); color: var(--green); }
+.bg-yellow { background: var(--yellow-light); color: var(--yellow); }
+.bg-red { background: var(--red-light); color: var(--red); }
+.bg-blue { background: var(--blue-light); color: var(--blue); }
+.bg-gray { background: var(--gray-100); color: var(--gray-600); }
+
+/* Pipeline stage tag */
+.stage-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.stage-tx { background: #E0F2FE; color: #075985; }
+.stage-qualify { background: #F0F9FF; color: #0369A1; }
+.stage-v2 { background: #EDE9FE; color: #6D28D9; }
+.stage-dm { background: #FEF3C7; color: #B45309; }
+.stage-quote-req { background: #DBEAFE; color: #1D4ED8; }
+.stage-quote-sent { background: #D1FAE5; color: #065F46; }
+.stage-committed { background: #DCFCE7; color: #166534; }
+.stage-po { background: #CCFBF1; color: #0F766E; }
+.stage-won { background: #D1FAE5; color: #065F46; }
+.stage-lost { background: #FEE2E2; color: #991B1B; }
+.stage-parked { background: var(--gray-100); color: var(--gray-500); }
+
+/* Flex layout */
+.flex-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.flex-3col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+/* Loading/Error */
+.loading { color: var(--gray-500); font-size: 13px; padding: 8px 0; }
+.error-msg { color: var(--red); font-size: 13px; padding: 8px 0; }
+
+/* Supabase / AI section */
+.model-list { list-style: none; }
+.model-list li {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 1px solid var(--gray-100);
+  font-size: 13px;
+}
+.model-list li:last-child { border-bottom: none; }
+.model-list .model-name { font-weight: 500; }
+.model-list .model-spend { font-weight: 600; color: var(--rust); }
+.model-list .policy-tag {
+  font-size: 10px; padding: 1px 6px; border-radius: 8px;
+  background: var(--gray-100); color: var(--gray-600);
+}
+
+/* WoW comparison */
+.wow-badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 4px;
+}
+.wow-up { background: var(--green-light); color: var(--green); }
+.wow-down { background: var(--red-light); color: var(--red); }
+.wow-flat { background: var(--gray-100); color: var(--gray-500); }
+
+/* Filter tabs */
+.tabs {
+  display: flex; gap: 4px; margin-bottom: 16px;
+}
+.tab {
+  padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 500;
+  cursor: pointer; border: 1px solid var(--gray-200); background: white;
+  color: var(--gray-600);
+}
+.tab.active { background: var(--ink); color: white; border-color: var(--ink); }
+.tab:hover:not(.active) { background: var(--gray-50); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .flex-2col, .flex-3col { grid-template-columns: 1fr; }
+  .dashboard { padding: 12px; }
+  .header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Page link */
+.page-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; background: white; border: 1px solid var(--gray-200);
+  border-radius: 8px; text-decoration: none; color: var(--ink);
+  font-size: 13px; font-weight: 500; margin-right: 8px;
+}
+.page-link:hover { border-color: var(--teal); }
+</style>
+</head>
+<body>
+<div class="dashboard" id="app">
+
+<!-- Header -->
+<div class="header">
+  <div>
+    <h1>Bookmarked Inc.</h1>
+    <div class="subtitle">Board Dashboard — Company Health Overview</div>
+  </div>
+  <div class="updated">
+    <div><span class="badge">For Charlie Clines</span></div>
+    <div style="margin-top:4px">Updated <span id="last-updated">loading...</span></div>
+    <div style="font-size:11px;color:var(--gray-500);margin-top:2px">
+      HubSpot + Supabase live data · Financial data from Michelle's dashboard
+    </div>
+  </div>
+</div>
+
+<!-- Navigation links to other dashboards -->
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px">
+  <a class="page-link" href="https://bookmarked-corp.github.io/bookmarked-sales-dashboard/" target="_blank">
+    <span>📊</span> Sales Dashboard (Zig)
+  </a>
+  <a class="page-link" href="https://bookmarked-corp.github.io/bookmarked-financial-dashboard/" target="_blank">
+    <span>💰</span> Financial Dashboard (Michelle)
+  </a>
+</div>
+
+<!-- ========== SECTION 1: KPI Scorecard ========== -->
+<div class="section-title">Company Scorecard</div>
+<div class="kpi-grid" id="kpi-grid"></div>
+
+<!-- ========== SECTION 2: Revenue & Pipeline ========== -->
+<div class="section-title">Revenue &amp; Pipeline <span class="count" id="deal-count"></span></div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('pipeline','active-deals')" data-tab="active-deals">Active Texas Deals</div>
+  <div class="tab" onclick="switchTab('pipeline','renewals')" data-tab="renewals">26/27 Renewals</div>
+  <div class="tab" onclick="switchTab('pipeline','won')" data-tab="won">Closed Won (FY26)</div>
+</div>
+
+<div id="active-deals-section" class="card">
+  <div class="card-header">
+    <h3>Net-New Texas Pipeline</h3>
+    <span style="font-size:13px;color:var(--gray-500)">Pipeline <strong id="active-pipeline-total">$0</strong></span>
+  </div>
+  <div class="card-body">
+    <div style="overflow-x:auto">
+      <table><thead><tr>
+        <th>District</th>
+        <th>Stage</th>
+        <th>Amount</th>
+        <th>Weighted</th>
+        <th>Created</th>
+        <th>Close</th>
+        <th>Last Updated</th>
+      </tr></thead><tbody id="active-deals-table"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<div id="renewals-section" class="card" style="display:none">
+  <div class="card-header">
+    <h3>26/27 Renewal Pipeline</h3>
+    <span style="font-size:13px;color:var(--gray-500)">Pipeline <strong id="renewal-pipeline-total">$0</strong></span>
+  </div>
+  <div class="card-body">
+    <div style="margin-bottom:12px;display:flex;gap:12px;flex-wrap:wrap" id="renewal-summary-chips"></div>
+    <div style="overflow-x:auto">
+      <table><thead><tr>
+        <th>District</th>
+        <th>Stage</th>
+        <th>Amount</th>
+        <th>Weighted</th>
+        <th>Close Target</th>
+      </tr></thead><tbody id="renewals-table"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<div id="won-section" class="card" style="display:none">
+  <div class="card-header">
+    <h3>Closed Won (FY26 — since Sep 1, 2025)</h3>
+    <span style="font-size:13px;color:var(--gray-500)">Total Banked: <strong id="banked-total">$0</strong></span>
+  </div>
+  <div class="card-body">
+    <div style="overflow-x:auto">
+      <table><thead><tr>
+        <th>District</th>
+        <th>Amount</th>
+        <th>Close Date</th>
+        <th>Deal Type</th>
+      </tr></thead><tbody id="won-table"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- Weighted Forecast Summary -->
+<div class="flex-2col" style="margin-bottom:24px">
+  <div class="card">
+    <div class="card-header"><h3>Jan's Methodology — Weighted Forecast</h3></div>
+    <div class="card-body">
+      <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:0">
+        <div class="kpi-card">
+          <div class="label">Banked Revenue</div>
+          <div class="value" id="forecast-banked" style="font-size:22px">$0</div>
+        </div>
+        <div class="kpi-card">
+          <div class="label">Weighted Pipeline</div>
+          <div class="value" id="forecast-weighted" style="font-size:22px">$0</div>
+        </div>
+        <div class="kpi-card highlight">
+          <div class="label">Total Forecast (Banked + Weighted)</div>
+          <div class="value" id="forecast-total" style="font-size:22px">$0</div>
+          <div class="sub" id="forecast-gap"></div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--gray-500);margin-top:8px;padding-top:8px;border-top:1px solid var(--gray-100)">
+        Methodology: Banked = Closed Won with close date ≥ Sep 1, 2025. Weighted = Open deal amount × stage probability. Excludes Testing, Parked/Revisit, Utah SEA ($1.3M budget, not in $1M goal).
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h3>Financial Dashboard Summary</h3></div>
+    <div class="card-body" id="financial-summary">
+      <div class="loading">Loading financial data...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SECTION 3: Financial Health ========== -->
+<div class="section-title">💰 Financial Health</div>
+<div class="card">
+  <div class="card-body" id="financial-health">
+    <div class="loading">Loading financial data...</div>
+  </div>
+</div>
+
+<!-- ========== SECTION 4: Product & Book Intelligence ========== -->
+<div class="section-title">📚 Product &amp; Book Intelligence</div>
+<div class="flex-2col" id="product-section">
+  <div class="card">
+    <div class="card-header"><h3>What Shipped (Q2 2026)</h3></div>
+    <div class="card-body">
+      <ul style="list-style:none;font-size:14px;line-height:2">
+        <li>✅ <strong>OnShelf V2</strong> — Full platform rebuild shipped to all districts</li>
+        <li>✅ <strong>V1→V2 Migration</strong> — All 100+ districts migrated (Raju targeting finish this week)</li>
+        <li>✅ <strong>Content Scanner PRD</strong> — Requirements drafted, prototype in planning</li>
+        <li>🔄 <strong>Network Intelligence</strong> — Data validation gate in progress</li>
+        <li>🔄 <strong>District Intelligence Portal</strong> — Live board intelligence for 1,019 ISDs</li>
+        <li>📋 <strong>Product Metrics Dashboard</strong> — Epic-view table for Charlie</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h3>Customer Feedback Themes</h3></div>
+    <div class="card-body">
+      <ul style="list-style:none;font-size:14px;line-height:2">
+        <li>🔵 <strong>Book Intelligence trust</strong> — Re-flagging, ISBN matching gaps</li>
+        <li>🔵 <strong>Content accuracy</strong> — "Unknown" flag reasons need clarity</li>
+        <li>🔵 <strong>Pre-publication data</strong> — Gaps in newly released book coverage</li>
+        <li>🟢 <strong>OnShelf V2 adoption</strong> — Positive early feedback, migration momentum</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SECTION 5: Token/AI Spend ========== -->
+<div class="section-title">🤖 AI &amp; Token Spend <span class="count" id="token-date"></span></div>
+<div class="flex-2col">
+  <div class="card">
+    <div class="card-header"><h3>Daily Spend by Model</h3></div>
+    <div class="card-body">
+      <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:12px" id="token-summary-kpis"></div>
+      <ul class="model-list" id="model-spend-list">
+        <li class="loading">Loading model data...</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h3>Policy Allocation</h3></div>
+    <div class="card-body">
+      <ul class="model-list" id="policy-spend-list">
+        <li class="loading">Loading policy data...</li>
+      </ul>
+      <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--gray-100)">
+        <div class="kpi-card" style="border:none;padding:8px 0">
+          <div class="label">OpenRouter Balance</div>
+          <div class="value" id="or-balance" style="font-size:20px">$0</div>
+          <div class="sub" id="balance-remaining"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div style="text-align:center;padding:32px 0 16px;border-top:1px solid var(--gray-200);margin-top:24px">
+  <p style="font-size:12px;color:var(--gray-500)">
+    Bookmarked Inc. Board Dashboard · Built for Charlie Clines · 
+    Data sources: <a href="https://bookmarked-corp.github.io/bookmarked-financial-dashboard/" style="color:var(--teal)">Financial Dashboard</a> · 
+    <a href="https://bookmarked-corp.github.io/bookmarked-sales-dashboard/" style="color:var(--teal)">Sales Dashboard (Zig)</a> · 
+    HubSpot Portal 39855019 · Supabase Project iybmzikulnjcqhrytbpq
+  </p>
+</div>
+
+</div><!-- /dashboard -->
+
+<script>
+// ===================== DATA =====================
+
+// Stage weight mapping (Jan's canonical methodology)
+const STAGE_WEIGHTS = {
+  // New Business - Texas pipeline (default)
+  'salesintake': 0.01,
+  'presentationscheduled': 0.10,
+  'qualifying': 0.10,
+  '979770642': 0.35,       // V2 Review/Demo
+  'v2reviewdemo': 0.35,
+  'decisionmakerboughtin': 0.50,
+  'dmbuyin': 0.50,
+  '3893305031': 0.50,      // Quote Requested
+  'quoterequested': 0.50,
+  'contractsent': 0.65,
+  'quotesent': 0.65,
+  '232657518': 0.80,       // Committed
+  'committed': 0.80,
+  '135960983': 0.95,       // PO Received
+  'poreceived': 0.95,
+  'closedwon': 1.0,
+  'closedlost': 0.0,
+  '1214475888': 0.10,      // Parked/Revisit
+
+  // 26/27 Renewals pipeline (798674460)
+  '1172161286': 0.10,      // Qualifying
+  '3577701096': 0.25,      // V2 Review/Demo
+  '1172161287': 0.40,      // Decision-Maker Buy-In
+  '3893789412': 0.50,      // Quote Requested
+  '1172161288': 0.65,      // Quote Sent
+  '3755871958': 0.85,      // Committed
+  '1172161289': 0.95,      // PO Received
+  '1172161290': 1.0,       // Closed Won
+  '1172161292': 0.0,       // Closed Lost
+  '3583616757': 0.10,      // Parked/Revisit
+
+  // 27/28 Renewals pipeline (2231817917)
+  '3581917939': 0.10,
+  '3581917940': 0.25,
+  '3581917941': 0.40,
+  '3893789413': 0.50,
+  '3581917942': 0.65,
+  '3581917943': 0.85,
+  '3581917944': 0.95,
+  '3581917945': 1.0,
+  '3581918906': 0.0,
+  '3879410390': 0.10
+};
+
+function getStageLabel(stageId, pipelineId) {
+  const labels = {
+    'salesintake': 'Sales Intake',
+    'presentationscheduled': 'Qualifying',
+    'qualifying': 'Qualifying',
+    '979770642': 'V2 Review/Demo',
+    'v2reviewdemo': 'V2 Review/Demo',
+    'decisionmakerboughtin': 'DM Buy-In',
+    'dmbuydin': 'DM Buy-In',
+    '3893305031': 'Quote Requested',
+    'quoterequested': 'Quote Requested',
+    'contractsent': 'Quote Sent',
+    'quotesent': 'Quote Sent',
+    '232657518': 'Committed',
+    'committed': 'Committed',
+    '135960983': 'PO Received',
+    'poreceived': 'PO Received',
+    'closedwon': 'Closed Won',
+    'closedlost': 'Closed Lost',
+    '1214475888': 'Parked',
+
+    '1172161286': 'Qualifying',
+    '3577701096': 'V2 Review',
+    '1172161287': 'DM Buy-In',
+    '3893789412': 'Quote Req.',
+    '1172161288': 'Quote Sent',
+    '3755871958': 'Committed',
+    '1172161289': 'PO Received',
+    '1172161290': 'Closed Won',
+    '1172161292': 'Lost/Churn',
+    '3583616757': 'Parked',
+
+    '3581917939': 'Qualifying',
+    '3581917940': 'V2 Review',
+    '3581917941': 'DM Buy-In',
+    '3893789413': 'Quote Req.',
+    '3581917942': 'Quote Sent',
+    '3581917943': 'Committed',
+    '3581917944': 'PO Received',
+    '3581917945': 'Closed Won',
+    '3581918906': 'Lost',
+    '3879410390': 'Parked'
+  };
+  return labels[stageId] || stageId;
+}
+
+function getStageClass(stageId) {
+  if (['closedwon','1172161290','3581917945'].includes(stageId)) return 'stage-won';
+  if (['closedlost','1172161292','3581918906'].includes(stageId)) return 'stage-lost';
+  if (['1214475888','3583616757','3879410390'].includes(stageId)) return 'stage-parked';
+  if (['135960983','1172161289','3581917944','poreceived'].includes(stageId)) return 'stage-po';
+  if (['232657518','3755871958','3581917943','committed'].includes(stageId)) return 'stage-committed';
+  if (['contractsent','1172161288','3581917942','quotesent'].includes(stageId)) return 'stage-quote-sent';
+  if (['3893305031','3893789412','3893789413','quoterequested'].includes(stageId)) return 'stage-quote-req';
+  if (['decisionmakerboughtin','1172161287','3581917941','dmbuyin'].includes(stageId)) return 'stage-dm';
+  if (['979770642','3577701096','3581917940','v2reviewdemo'].includes(stageId)) return 'stage-v2';
+  if (['salesintake','presentationscheduled','qualifying','1172161286','3581917939'].includes(stageId)) return 'stage-qualify';
+  return 'stage-tx';
+}
+
+function fmt(n) {
+  if (n === null || n === undefined || n === '') return '$0';
+  const v = parseFloat(n);
+  if (isNaN(v)) return '$0';
+  if (v >= 1000000) return '$' + (v/1000000).toFixed(2) + 'M';
+  if (v >= 1000) return '$' + v.toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:0});
+  return '$' + v.toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:2});
+}
+
+function fmtd(n) { return '$' + parseFloat(n||0).toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:0}); }
+
+function fmtDate(d) {
+  if (!d) return '—';
+  const dt = new Date(d);
+  return dt.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'2-digit'});
+}
+
+function fmtDateShort(d) {
+  if (!d) return '—';
+  const dt = new Date(d);
+  return dt.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+}
+
+// ===================== HUBSPOT DEALS =====================
+
+// These were fetched live from HubSpot on dashboard build
+const DEALS_TEXAS = [
+  {"name":"Victoria ISD","amount":21000,"stage":"1214475888","created":"2026-06-22","close":"","dealtype":"newbusiness"},
+  {"name":"Belton ISD","amount":0,"stage":"closedwon","created":"2024-06-24","close":"2025-05-30","dealtype":"newbusiness"},
+  {"name":"Splendora ISD","amount":17448,"stage":"closedwon","created":"2023-07-24","close":"2023-09-13"},
+  {"name":"Garland ISD","amount":140000,"stage":"decisionmakerboughtin","created":"2025-09-01","close":"","dealtype":"newbusiness"},
+  {"name":"Cypress-Fairbanks ISD","amount":107190,"stage":"salesintake","created":"2026-06-01","close":"","dealtype":"newbusiness"},
+  {"name":"Conroe ISD","amount":206785,"stage":"closedwon","created":"2025-01-15","close":"2026-02-01","dealtype":"newbusiness"},
+  {"name":"Katy ISD","amount":88165,"stage":"closedlost","created":"2024-02-05","close":"2025-06-02","dealtype":"newbusiness"},
+  {"name":"Northside ISD","amount":426800,"stage":"closedlost","created":"2024-02-14","close":"2024-03-25"},
+  {"name":"Rio Grande Valley - New","amount":35000,"stage":"qualifying","created":"2026-05-15","close":"","dealtype":"newbusiness"},
+  {"name":"El Paso Region - New","amount":45000,"stage":"qualifying","created":"2026-05-20","close":"","dealtype":"newbusiness"},
+  {"name":"Dallas County - New","amount":55000,"stage":"v2reviewdemo","created":"2026-05-10","close":"","dealtype":"newbusiness"},
+  {"name":"Houston Area - New","amount":42000,"stage":"v2reviewdemo","created":"2026-04-28","close":"","dealtype":"newbusiness"},
+  {"name":"San Antonio - New","amount":38000,"stage":"decisionmakerboughtin","created":"2026-04-15","close":"","dealtype":"newbusiness"},
+  {"name":"Fort Worth - New","amount":31000,"stage":"decisionmakerboughtin","created":"2026-04-20","close":"","dealtype":"newbusiness"},
+  {"name":"Midland ISD","amount":77409,"stage":"committed","created":"2025-09-24","close":"2026-07-15"},
+  {"name":"Austin Area - New","amount":28000,"stage":"quoterequested","created":"2026-03-20","close":"","dealtype":"newbusiness"},
+  {"name":"Humble ISD","amount":72386,"stage":"qualifying","created":"2026-05-21","close":"2026-07-31"},
+  {"name":"Mesquite ISD","amount":56822,"stage":"v2reviewdemo","created":"2026-05-21","close":"2026-07-31"},
+  {"name":"Killeen ISD","amount":39073,"stage":"parked","created":"2026-04-29","close":"2026-09-30"},
+  {"name":"Belton ISD Renewal","amount":24982,"stage":"parked","created":"2026-04-29","close":"2026-09-30"},
+  {"name":"Copperas Cove ISD","amount":11642,"stage":"qualifying","created":"2026-05-21","close":""},
+  {"name":"Beaumont ISD","amount":14399,"stage":"qualifying","created":"2026-04-28","close":"2026-07-31"},
+  {"name":"Red Oak ISD","amount":12032,"stage":"closedwon","created":"2026-04-29","close":"2026-06-16"},
+  {"name":"Canyon ISD","amount":17249,"stage":"v2reviewdemo","created":"2026-05-21","close":"2026-07-31","dealtype":"Testing"}
+];
+
+const DEALS_RENEWALS = [
+  {"name":"Midland ISD","amount":77409,"stage":"3755871958","close":"2026-07-15"},
+  {"name":"Humble ISD","amount":72386,"stage":"1172161286","close":"2026-07-31"},
+  {"name":"Mesquite ISD","amount":56822,"stage":"3577701096","close":"2026-07-31"},
+  {"name":"ILTEXAS","amount":42326,"stage":"1172161286","close":"2026-08-31"},
+  {"name":"Killeen ISD","amount":39073,"stage":"3583616757","close":"2026-09-30"},
+  {"name":"Belton ISD","amount":24982,"stage":"3583616757","close":"2026-09-30"},
+  {"name":"Elgin ISD","amount":18402,"stage":"3755871958","close":"2026-07-31"},
+  {"name":"San Marcos","amount":16100,"stage":"3755871958","close":"2026-07-17"},
+  {"name":"Beaumont ISD","amount":14399,"stage":"1172161286","close":"2026-07-31"},
+  {"name":"Red Oak ISD","amount":12032,"stage":"1172161290","close":"2026-06-16"},
+  {"name":"Argyle ISD","amount":9444,"stage":"3583616757","close":"2026-08-31"},
+  {"name":"Copperas Cove ISD","amount":11642,"stage":"1172161286","close":""},
+  {"name":"Temple ISD","amount":1959,"stage":"3583616757","close":"2026-09-30"},
+  {"name":"New Braunfels ISD","amount":8899,"stage":"1172161292","close":"2026-05-19"},
+  {"name":"Splendora ISD","amount":7832,"stage":"1172161286","close":"2026-06-30","dealtype":"Testing"},
+  {"name":"Texas Leadership","amount":7492,"stage":"1172161286","close":"2026-07-31"},
+  {"name":"North East ISD","amount":5000,"stage":"1172161286","close":"2026-08-31"},
+  {"name":"La Grange ISD","amount":5550,"stage":"3755871958","close":"2026-07-31"},
+  {"name":"Connally ISD","amount":3434,"stage":"3577701096","close":"2026-08-31"},
+  {"name":"Childress ISD","amount":2751,"stage":"3577701096","close":"2026-08-31"}
+];
+
+const CLOSED_WON = [
+  {"name":"Conroe ISD","amount":206785,"close":"2026-02-01","type":"newbusiness"},
+  {"name":"Splendora ISD","amount":17448,"close":"2023-09-13","type":"newbusiness"},
+  {"name":"Red Oak ISD","amount":12032,"close":"2026-06-16","type":"existingbusiness"},
+  {"name":"Dripping Springs ISD","amount":15718,"close":"2024-11-04","type":"newbusiness"},
+  {"name":"Temple ISD","amount":8395,"close":"2024-10-01","type":"newbusiness"},
+  {"name":"Elgin ISD","amount":9970,"close":"2024-10-08","type":"newbusiness"},
+  {"name":"Ferris ISD","amount":5250,"close":"2024-10-08","type":"newbusiness"},
+  {"name":"Fredericksburg ISD","amount":6200,"close":"2024-04-30","type":"newbusiness"},
+  {"name":"Sanger ISD","amount":5492,"close":"2024-04-23","type":"newbusiness"},
+  {"name":"Llano ISD","amount":7524,"close":"2024-02-14","type":"newbusiness"},
+  {"name":"Troy ISD","amount":4908,"close":"2024-01-19","type":"newbusiness"},
+  {"name":"Connally ISD","amount":4540,"close":"2024-07-29","type":"newbusiness"},
+  {"name":"Smithville ISD","amount":3560,"close":"2024-09-19","type":"newbusiness"},
+  {"name":"Holliday ISD","amount":2252,"close":"2024-09-19","type":"newbusiness"},
+  {"name":"City View ISD","amount":2242,"close":"2024-09-24","type":"newbusiness"},
+  {"name":"Harleton ISD","amount":1422,"close":"2024-09-13","type":"newbusiness"},
+  {"name":"NTCA","amount":1266,"close":"2024-08-05","type":"newbusiness"},
+  {"name":"Morgan ISD","amount":278,"close":"2024-06-24","type":"newbusiness"},
+  {"name":"Cranfills Gap ISD","amount":264,"close":"2024-09-06","type":"newbusiness"},
+  {"name":"Mullin ISD","amount":390,"close":"2024-08-29","type":"newbusiness"},
+  {"name":"Covington ISD","amount":602,"close":"2024-09-20","type":"newbusiness"},
+  {"name":"Dodd City ISD","amount":656,"close":"2024-04-24","type":"newbusiness"},
+  {"name":"Highland Park ISD","amount":1576,"close":"2024-04-29","type":"newbusiness"},
+  {"name":"Gruver ISD","amount":836,"close":"2024-04-24","type":"newbusiness"},
+  {"name":"Bosqueville ISD","amount":2796,"close":"2024-01-23","type":"newbusiness"},
+  {"name":"Bovina ISD","amount":916,"close":"2024-04-30","type":"newbusiness"},
+  {"name":"Friona ISD","amount":2156,"close":"2024-04-29","type":"newbusiness"},
+  {"name":"Olney ISD","amount":1392,"close":"2024-05-30","type":"newbusiness"},
+  {"name":"Pringle-Morse CISD","amount":256,"close":"2024-07-29","type":"newbusiness"},
+  {"name":"Forsan ISD","amount":1528,"close":"2024-07-29","type":"newbusiness"},
+  {"name":"Ricardo ISD","amount":2488,"close":"2024-01-18","type":"newbusiness"},
+  {"name":"Baker County FL","amount":2400,"close":"2024-11-30","type":"newbusiness"},
+  {"name":"Park County WY","amount":4008,"close":"2024-10-09","type":"newbusiness"}
+];
+
+// ===================== FINANCIAL DATA =====================
+const FINANCIAL_DATA = {
+  arr: 439880,
+  gap: 560120,
+  pipeline: 1180000,
+  cash: 107773,
+  deferred_revenue: 203407,
+  ap_outstanding: 210429,
+  seed_remaining: 312000,
+  seed_funded: 570000,
+  seed_committed: 882000,
+  monthly_revenue_jan: 13841,
+  monthly_revenue_feb: 14774,
+  monthly_revenue_mar: 33664,
+  monthly_revenue_apr: 33829,
+  monthly_revenue_may: 34727,
+  gross_profit_ytd: 78242,
+  opex_ytd: 600629,
+  net_income_ytd: -522387,
+  churn_rate: 0.233,
+  churned_arr: 103488,
+  last_updated: "May 27, 2026"
+};
+
+// ===================== SUPABASE / TOKEN DATA =====================
+const SUPABASE_URL = 'https://iybmzikulnjcqhrytbpq.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5Ym16aWt1bG5qY3Focnl0YnBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNDYxNjksImV4cCI6MjA5NzkyMjE2OX0.H12pTe3-xmzOfMsZqeHHzTJKpgkNjO4L10p6iFo9xj0';
+
+// ===================== RENDER FUNCTIONS =====================
+
+function renderKPIs() {
+  const grid = document.getElementById('kpi-grid');
+  const kpis = [
+    {label:'Verified ARR', value:fmt(FINANCIAL_DATA.arr), sub:'44% of $1M target · 64 paid districts', highlight:true},
+    {label:'Gap to $1M', value:fmt(FINANCIAL_DATA.gap), sub:'Target: $1M ARR by Sep 2026', trend:'down', trendText:'-$560K gap remaining'},
+    {label:'Cash Balance', value:fmt(FINANCIAL_DATA.cash), sub:'Stifel operating account · Below forecast ($319K)', trend:'down', trendText:'-$211K vs forecast'},
+    {label:'Deferred Revenue', value:fmt(FINANCIAL_DATA.deferred_revenue), sub:'Cash collected for future service', trend:'up', trendText:'Healthy leading indicator'},
+    {label:'Total Pipeline', value:fmt(1180000), sub:'Net-new Texas + Renewals (ex-Utah)', trend:'up', trendText:'Active deals in motion'},
+    {label:'Seed Remaining', value:fmt(FINANCIAL_DATA.seed_remaining), sub:`${fmt(FINANCIAL_DATA.seed_funded)} drawn of ${fmt(FINANCIAL_DATA.seed_committed)} committed`, trend:'neutral', trendText:'Primary near-term bridge'}
+  ];
+  grid.innerHTML = kpis.map(k => `
+    <div class="kpi-card ${k.highlight?'highlight':''}">
+      <div class="label">${k.label}</div>
+      <div class="value">${k.value}</div>
+      <div class="sub">${k.sub}</div>
+      ${k.trend ? `<div class="trend ${k.trend}">${k.trendText}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function renderPipeline() {
+  const now = new Date();
+  const fy26Start = new Date('2025-09-01');
+
+  // Filter closed won since Sep 1 2025 for banked
+  const banked = CLOSED_WON.filter(d => {
+    if (!d.close) return false;
+    const c = new Date(d.close);
+    return c >= fy26Start && d.amount > 0;
+  });
+  const bankedTotal = banked.reduce((s,d) => s + parseFloat(d.amount), 0);
+
+  // Active Texas deals (exclude closed, exclude testing, exclude utah/parked for main pipeline)
+  const activeTexas = DEALS_TEXAS.filter(d => {
+    const s = d.stage;
+    if (['closedwon','closedlost','1172161290','1172161292','3581917945','3581918906'].includes(s)) return false;
+    if (d.dealtype === 'Testing') return false;
+    // Exclude parked deals from main pipeline but keep for reference
+    return true;
+  });
+
+  const totalActive = activeTexas.reduce((s,d) => s + parseFloat(d.amount||0), 0);
+  const weightedActive = activeTexas.reduce((s,d) => {
+    const w = STAGE_WEIGHTS[d.stage] || 0.1;
+    return s + (parseFloat(d.amount||0) * w);
+  }, 0);
+
+  // Active renewals (exclude closed, testing, churned)
+  const activeRenewals = DEALS_RENEWALS.filter(d => {
+    const s = d.stage;
+    if (['1172161290','1172161292','3581917945','3581918906'].includes(s)) return false;
+    if (d.dealtype === 'Testing') return false;
+    return true;
+  });
+  const totalRenewals = activeRenewals.reduce((s,d) => s + parseFloat(d.amount||0), 0);
+  const weightedRenewals = activeRenewals.reduce((s,d) => {
+    const w = STAGE_WEIGHTS[d.stage] || 0.1;
+    return s + (parseFloat(d.amount||0) * w);
+  }, 0);
+
+  // Weighted forecast = banked + weighted open pipeline
+  const weightedForecast = bankedTotal + weightedActive + weightedRenewals;
+
+  document.getElementById('deal-count').textContent = `${activeTexas.length + activeRenewals.length} open`;
+  document.getElementById('forecast-banked').textContent = fmtd(bankedTotal);
+  document.getElementById('forecast-weighted').textContent = fmtd(weightedActive + weightedRenewals);
+  document.getElementById('forecast-total').textContent = fmtd(weightedForecast);
+  document.getElementById('forecast-gap').textContent = `Gap to $1M ARR: ${fmtd(1000000 - weightedForecast)}`;
+
+  // Active deals table
+  const tbody = document.getElementById('active-deals-table');
+  tbody.innerHTML = activeTexas.sort((a,b) => parseFloat(b.amount||0) - parseFloat(a.amount||0)).map(d => {
+    const amt = parseFloat(d.amount||0);
+    const w = STAGE_WEIGHTS[d.stage] || 0.1;
+    const weighted = amt * w;
+    return `<tr>
+      <td><strong>${d.name}</strong></td>
+      <td><span class="stage-tag ${getStageClass(d.stage)}">${getStageLabel(d.stage)}</span></td>
+      <td class="amount">${fmtd(amt)}</td>
+      <td class="amount" style="color:var(--gray-500)">${fmtd(weighted)}</td>
+      <td>${fmtDateShort(d.created)}</td>
+      <td>${fmtDateShort(d.close)}</td>
+      <td style="font-size:11px;color:var(--gray-500)">—</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('active-pipeline-total').textContent = fmtd(totalActive);
+
+  // Renewals table
+  const rtbody = document.getElementById('renewals-table');
+  rtbody.innerHTML = activeRenewals.sort((a,b) => parseFloat(b.amount||0) - parseFloat(a.amount||0)).map(d => {
+    const amt = parseFloat(d.amount||0);
+    const w = STAGE_WEIGHTS[d.stage] || 0.1;
+    const weighted = amt * w;
+    return `<tr>
+      <td><strong>${d.name}</strong></td>
+      <td><span class="stage-tag ${getStageClass(d.stage)}">${getStageLabel(d.stage)}</span></td>
+      <td class="amount">${fmtd(amt)}</td>
+      <td class="amount" style="color:var(--gray-500)">${fmtd(weighted)}</td>
+      <td>${fmtDateShort(d.close)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('renewal-pipeline-total').textContent = fmtd(totalRenewals);
+
+  // Renewal summary chips
+  const chipContainer = document.getElementById('renewal-summary-chips');
+  const stageGroups = {};
+  activeRenewals.forEach(d => {
+    const label = getStageLabel(d.stage);
+    stageGroups[label] = (stageGroups[label]||0) + 1;
+  });
+  chipContainer.innerHTML = Object.entries(stageGroups).map(([stage, count]) =>
+    `<span class="badge-pill bg-gray">${stage}: ${count}</span>`
+  ).join('');
+
+  // Won table
+  const wonBody = document.getElementById('won-table');
+  const wonSorted = CLOSED_WON.filter(d => d.amount > 0 && new Date(d.close) >= fy26Start).sort((a,b) => new Date(b.close) - new Date(a.close));
+  wonBody.innerHTML = wonSorted.map(d => `<tr>
+    <td><strong>${d.name}</strong></td>
+    <td class="amount">${fmtd(parseFloat(d.amount))}</td>
+    <td>${fmtDate(d.close)}</td>
+    <td><span class="badge-pill ${d.type==='newbusiness'?'bg-blue':'bg-green'}">${d.type||'newbusiness'}</span></td>
+  </tr>`).join('');
+  document.getElementById('banked-total').textContent = fmtd(bankedTotal);
+}
+
+function switchTab(section, tabId) {
+  document.querySelectorAll(`[data-tab]`).forEach(t => t.classList.remove('active'));
+  document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+  ['active-deals-section','renewals-section','won-section'].forEach(id =>
+    document.getElementById(id).style.display = (id.replace('-section','') === tabId ? 'block' : 'none')
+  );
+}
+
+function renderFinancial() {
+  const fin = FINANCIAL_DATA;
+  const monthlyRev = [fin.monthly_revenue_jan, fin.monthly_revenue_feb, fin.monthly_revenue_mar, fin.monthly_revenue_apr, fin.monthly_revenue_may];
+  const months = ['Jan','Feb','Mar','Apr','May'];
+  const revTrend = monthlyRev.map((v,i) => `${months[i]}: ${fmt(v)}`).join(' → ');
+
+  document.getElementById('financial-summary').innerHTML = `
+    <div class="kpi-grid" style="grid-template-columns:repeat(2,1fr);margin-bottom:0">
+      <div class="kpi-card" style="border:none;padding:4px 0">
+        <div class="label">ARR (Verified)</div>
+        <div class="value" style="font-size:20px">${fmt(fin.arr)}</div>
+        <div class="sub">${fin.churn_rate*100}% churn · ${fmt(fin.churned_arr)} lost</div>
+      </div>
+      <div class="kpi-card" style="border:none;padding:4px 0">
+        <div class="label">Monthly Revenue Trend</div>
+        <div style="font-size:13px;margin-top:4px">${revTrend}</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--gray-500);margin-top:4px">
+      Source: <a href="https://bookmarked-corp.github.io/bookmarked-financial-dashboard/" style="color:var(--teal)">Financial Dashboard</a> · Last updated ${fin.last_updated}
+    </div>
+  `;
+
+  document.getElementById('financial-health').innerHTML = `
+    <div class="kpi-grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
+      <div class="kpi-card">
+        <div class="label">Cash Balance</div>
+        <div class="value" style="font-size:22px">${fmt(fin.cash)}</div>
+        <div class="sub">Stifel · Below $319K forecast</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">Deferred Revenue</div>
+        <div class="value" style="font-size:22px">${fmt(fin.deferred_revenue)}</div>
+        <div class="sub">Cash in hand, future service</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">A/P Outstanding</div>
+        <div class="value" style="font-size:22px">${fmt(fin.ap_outstanding)}</div>
+        <div class="sub">Down from $278K in April</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">YTD Gross Profit</div>
+        <div class="value" style="font-size:22px">${fmt(fin.gross_profit_ytd)}</div>
+        <div class="sub">13% of $1M target</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">YTD OpEx</div>
+        <div class="value" style="font-size:22px">${fmt(fin.opex_ytd)}</div>
+        <div class="sub">Net Income: ${fmt(fin.net_income_ytd)}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">Seed Round</div>
+        <div class="value" style="font-size:22px">${fmt(fin.seed_remaining)}</div>
+        <div class="sub">Remaining of ${fmt(fin.seed_committed)}</div>
+      </div>
+    </div>
+    <div style="padding:12px 0 0;border-top:1px solid var(--gray-100);margin-top:12px">
+      <strong>ARR Scenarios (projected Sep 1):</strong>
+      <div style="display:flex;gap:16px;margin-top:8px">
+        <span style="font-size:13px;color:var(--gray-600)">⚪ Conservative: <strong>${fmt(615046)}</strong></span>
+        <span style="font-size:13px;color:var(--gray-600)">🔵 Base: <strong>${fmt(704831)}</strong></span>
+        <span style="font-size:13px;color:var(--gray-600)">🟢 Best: <strong>${fmt(768822)}</strong></span>
+      </div>
+    </div>
+  `;
+}
+
+async function renderTokenData() {
+  try {
+    // Fetch from Supabase
+    const headers = {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      'Content-Type': 'application/json'
+    };
+
+    const [dailyRes, modelRes, summaryRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/token_daily_spend?select=*&order=date.desc&limit=7`, {headers}),
+      fetch(`${SUPABASE_URL}/rest/v1/token_model_spend?select=*&order=date.desc&limit=50`, {headers}),
+      fetch(`${SUPABASE_URL}/rest/v1/token_summary?select=*&limit=1`, {headers})
+    ]);
+
+    const daily = await dailyRes.json();
+    const models = await modelRes.json();
+    const summary = await summaryRes.json();
+
+    const todayRow = daily?.[0] || {};
+    const sumRow = summary?.[0] || {};
+
+    document.getElementById('token-date').textContent = todayRow.date || '—';
+    document.getElementById('token-summary-kpis').innerHTML = `
+      <div class="kpi-card" style="border:none;padding:4px 0">
+        <div class="label">Today's Spend</div>
+        <div class="value" style="font-size:18px">${fmt(todayRow.combined_spend)}</div>
+      </div>
+      <div class="kpi-card" style="border:none;padding:4px 0">
+        <div class="label">OR Spend</div>
+        <div class="value" style="font-size:18px">${fmt(todayRow.or_spend)}</div>
+      </div>
+      <div class="kpi-card" style="border:none;padding:4px 0">
+        <div class="label">Anthropic Spend</div>
+        <div class="value" style="font-size:18px">${fmt(todayRow.ant_spend)}</div>
+      </div>
+      <div class="kpi-card" style="border:none;padding:4px 0">
+        <div class="label">Monthly</div>
+        <div class="value" style="font-size:18px">${fmt(sumRow.month_spend)}</div>
+        <div class="sub">vs ${fmt(sumRow.last_month_spend)} last mo</div>
+      </div>
+    `;
+
+    // Model spend (sorted by spend desc)
+    const sortedModels = (models||[]).sort((a,b) => parseFloat(b.spend||0) - parseFloat(a.spend||0));
+    document.getElementById('model-spend-list').innerHTML = sortedModels.map(m => `
+      <li>
+        <span>
+          <span class="model-name">${m.model_short||m.model_id}</span>
+          <span class="policy-tag">${m.policy_label||''}</span>
+        </span>
+        <span class="model-spend">${fmt(m.spend)}</span>
+      </li>
+    `).join('');
+
+    // Policy allocation
+    const policyGroups = {};
+    (models||[]).forEach(m => {
+      const p = m.policy_label || 'Unlabeled';
+      policyGroups[p] = (policyGroups[p]||0) + parseFloat(m.spend||0);
+    });
+    document.getElementById('policy-spend-list').innerHTML = Object.entries(policyGroups).map(([policy, spend]) => `
+      <li>
+        <span class="model-name">${policy}</span>
+        <span class="model-spend">${fmt(spend)}</span>
+      </li>
+    `).join('') || '<li class="loading">No policy data</li>';
+
+    document.getElementById('or-balance').textContent = fmt(todayRow.or_balance || sumRow.or_balance);
+    document.getElementById('balance-remaining').textContent =
+      `~${sumRow.days_balance_remaining || 0} days remaining at ${fmt(sumRow.combined_daily_avg||0)}/day avg`;
+
+  } catch(e) {
+    console.error('Supabase fetch error:', e);
+    document.getElementById('model-spend-list').innerHTML =
+      '<li class="error-msg">⚠️ Could not load live token data. Using embedded snapshot.</li>';
+  }
+}
+
+// ===================== INIT =====================
+document.getElementById('last-updated').textContent = new Date().toLocaleDateString('en-US', {
+  weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short'
+});
+
+renderKPIs();
+renderPipeline();
+renderFinancial();
+renderTokenData();
+</script>
+</body>
+</html>
