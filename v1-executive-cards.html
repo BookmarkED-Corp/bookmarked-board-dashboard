@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bookmarked — Board Dashboard v1 · Executive Cards</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rust: #B12A0A; --rust-light: #D4431E; --teal: #12A38C; --teal-dark: #107569;
+  --ink: #101828; --ink-light: #344054; --gray-100: #F2F4F7; --gray-200: #E4E7EC;
+  --paper: #FCFCFD; --card: #FFFFFF; --amber: #D97706; --red: #C0392B; --green: #107569;
+  --radius: 12px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'DM Sans', sans-serif; background: #F9FAFB; color: var(--ink); -webkit-font-smoothing: antialiased; }
+.container { max-width: 1280px; margin: 0 auto; padding: 40px 32px; }
+
+/* Header */
+header { margin-bottom: 32px; }
+header h1 { font-family: 'DM Serif Display', serif; font-size: 2rem; font-weight: 400; }
+header .meta { color: var(--ink-light); font-size: 0.875rem; margin-top: 4px; }
+header .meta span { color: var(--teal); font-weight: 600; }
+
+/* Metric Cards Row */
+.metrics { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 32px; }
+.metric-card {
+  background: var(--card); border: 1px solid var(--gray-200); border-radius: var(--radius);
+  padding: 20px; position: relative; overflow: hidden;
+}
+.metric-card .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-light); font-weight: 600; margin-bottom: 8px; }
+.metric-card .value { font-family: 'DM Serif Display', serif; font-size: 1.75rem; line-height: 1.1; }
+.metric-card .sub { font-size: 0.8rem; color: var(--ink-light); margin-top: 4px; }
+.metric-card .delta { font-size: 0.8rem; font-weight: 600; margin-top: 4px; }
+.metric-card .delta.up { color: var(--green); }
+.metric-card .delta.warn { color: var(--amber); }
+.metric-card.accent { border-left: 3px solid var(--teal); }
+.metric-card.warn { border-left: 3px solid var(--amber); }
+.metric-card.urgent { border-left: 3px solid var(--red); }
+
+/* Section Cards */
+.section { background: var(--card); border: 1px solid var(--gray-200); border-radius: var(--radius); margin-bottom: 20px; overflow: hidden; }
+.section summary { padding: 20px 24px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 1rem; list-style: none; }
+.section summary::-webkit-details-marker { display: none; }
+.section summary::after { content: '+'; font-size: 1.2rem; color: var(--teal); font-weight: 400; transition: transform 0.2s; }
+.section[open] summary::after { content: '−'; }
+.section-content { padding: 0 24px 24px; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+th { text-align: left; padding: 10px 12px; border-bottom: 2px solid var(--gray-200); font-weight: 600; color: var(--ink-light); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--gray-100); }
+tr:last-child td { border-bottom: none; }
+.amount { font-family: 'DM Mono', monospace; text-align: right; }
+.stage-badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+.stage-badge.committed { background: #D1FAE5; color: var(--green); }
+.stage-badge.quote-sent { background: #DBEAFE; color: #1D4ED8; }
+.stage-badge.qualifying { background: #FEF3C7; color: var(--amber); }
+.stage-badge.intake { background: var(--gray-100); color: var(--ink-light); }
+
+/* Two-column */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+/* Tags */
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.tag.verified { background: #D1FAE5; color: var(--green); }
+.tag.reported { background: #FEF3C7; color: var(--amber); }
+
+/* Footer */
+footer { text-align: center; color: #98A2B3; font-size: 0.75rem; margin-top: 40px; }
+footer a { color: var(--teal); text-decoration: none; }
+
+/* Responsive */
+@media (max-width: 900px) { .metrics { grid-template-columns: repeat(2, 1fr); } .grid-2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Bookmarked Inc.</h1>
+  <p class="meta">Board Dashboard · Week of June 27, 2026 · For Charlie Clines · <span>Data as of Jun 25</span></p>
+</header>
+
+<!-- METRIC CARDS -->
+<div class="metrics">
+  <div class="metric-card accent">
+    <div class="label">Pipeline (TX)</div>
+    <div class="value">$998K</div>
+    <div class="sub">$561K net-new + $437K renewal</div>
+    <div class="delta up">↑ $140K committed this week</div>
+  </div>
+  <div class="metric-card accent">
+    <div class="label">Free→Paid Recovery</div>
+    <div class="value">$98K</div>
+    <div class="sub">5 districts converting from $0</div>
+    <div class="delta up">↑ Midland ISD $77K</div>
+  </div>
+  <div class="metric-card warn">
+    <div class="label">Gap to $1M</div>
+    <div class="value">$621K</div>
+    <div class="sub">$379K banked · Target end of Sept</div>
+    <div class="delta">Weighted forecast $739K</div>
+  </div>
+  <div class="metric-card">
+    <div class="label">CS Health</div>
+    <div class="value">Clean</div>
+    <div class="sub">3 open tickets · 0 escalated</div>
+    <div class="delta up">9 legacy tickets closed</div>
+  </div>
+  <div class="metric-card">
+    <div class="label">Product Velocity</div>
+    <div class="value">63/wk</div>
+    <div class="sub">Tickets created (2-week avg)</div>
+    <div class="delta">13 completed last week</div>
+  </div>
+</div>
+
+<!-- PIPELINE -->
+<details class="section" open>
+  <summary>Revenue & Pipeline</summary>
+  <div class="section-content grid-2">
+    <div>
+      <h3 style="font-size:0.875rem;text-transform:uppercase;letter-spacing:0.04em;color:var(--ink-light);margin-bottom:12px;">Net-New Texas · Top 5</h3>
+      <table>
+        <tr><th>District</th><th>Stage</th><th class="amount">Amount</th></tr>
+        <tr><td>Garland ISD</td><td><span class="stage-badge quote-sent">Quote Sent</span></td><td class="amount">$140,391</td></tr>
+        <tr><td>Cypress-Fairbanks</td><td><span class="stage-badge qualifying">Qualifying</span></td><td class="amount">$107,190</td></tr>
+        <tr><td>Pearland ISD</td><td><span class="stage-badge qualifying">DM Buy-In</span></td><td class="amount">$50,000</td></tr>
+        <tr><td>Midlothian ISD</td><td><span class="stage-badge qualifying">Qualifying</span></td><td class="amount">$30,786</td></tr>
+        <tr><td>Northside ISD</td><td><span class="stage-badge qualifying">DM Buy-In</span></td><td class="amount">$25,000</td></tr>
+        <tr style="border-top:2px solid var(--gray-200);font-weight:700;"><td>Total (25 deals)</td><td></td><td class="amount">~$561K</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3 style="font-size:0.875rem;text-transform:uppercase;letter-spacing:0.04em;color:var(--ink-light);margin-bottom:12px;">26/27 Renewals · Committed</h3>
+      <table>
+        <tr><th>District</th><th>Status</th><th class="amount">Amount</th></tr>
+        <tr><td>Midland ISD ⭐</td><td><span class="stage-badge committed">Committed</span></td><td class="amount">$77,409</td></tr>
+        <tr><td>Elgin ISD</td><td><span class="stage-badge committed">Committed</span></td><td class="amount">$18,402</td></tr>
+        <tr><td>San Marcos CISD ⭐</td><td><span class="stage-badge committed">Committed</span></td><td class="amount">$16,100</td></tr>
+        <tr><td>La Grange ISD</td><td><span class="stage-badge committed">Committed</span></td><td class="amount">$5,550</td></tr>
+        <tr><td>Glen Rose ISD</td><td><span class="stage-badge committed">Committed</span></td><td class="amount">$4,186</td></tr>
+        <tr style="border-top:2px solid var(--gray-200);font-weight:700;"><td>11 committed + 2 quoted</td><td></td><td class="amount">$140,438</td></tr>
+      </table>
+      <p style="font-size:0.75rem;color:var(--ink-light);margin-top:8px;">⭐ = free/pilot → paid conversion ($98K of $140K)</p>
+    </div>
+  </div>
+</details>
+
+<!-- CUSTOMER SUCCESS -->
+<details class="section">
+  <summary>Customer Success & Migration</summary>
+  <div class="section-content grid-2">
+    <div>
+      <h3 style="font-size:0.875rem;text-transform:uppercase;letter-spacing:0.04em;color:var(--ink-light);margin-bottom:12px;">Migration Pipeline</h3>
+      <table>
+        <tr><th>Stage</th><th class="amount">Districts</th></tr>
+        <tr><td>Announced</td><td class="amount">~30</td></tr>
+        <tr><td>Go-Live Verification</td><td class="amount">6</td></tr>
+        <tr><td>V1 Sunset Complete</td><td class="amount">2</td></tr>
+        <tr><td>Legacy Closed</td><td class="amount">9</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3 style="font-size:0.875rem;text-transform:uppercase;letter-spacing:0.04em;color:var(--ink-light);margin-bottom:12px;">Support Health</h3>
+      <table>
+        <tr><th>Metric</th><th class="amount">Value</th></tr>
+        <tr><td>Open Tickets</td><td class="amount" style="color:var(--green);">3</td></tr>
+        <tr><td>Escalated</td><td class="amount">0</td></tr>
+        <tr><td>Churn Signals</td><td class="amount">0</td></tr>
+        <tr><td>Backlog</td><td class="amount">Clear</td></tr>
+      </table>
+    </div>
+  </div>
+</details>
+
+<!-- PRODUCT -->
+<details class="section">
+  <summary>Product & Book Intelligence</summary>
+  <div class="section-content">
+    <table>
+      <tr><th>What Shipped (last 2 weeks)</th><th>Status</th></tr>
+      <tr><td>Restricted Books support suite — student UI + district admin controls</td><td>✅ Live</td></tr>
+      <tr><td>Book Intelligence data inside Orders workflow</td><td>✅ Live</td></tr>
+      <tr><td>Staff Invite flow completed</td><td>✅ Live</td></tr>
+      <tr><td>Order Workflow Phase 1 (Kanban + drag-and-drop)</td><td>🔄 Dev Review</td></tr>
+      <tr><td>Network Intelligence Phase 0 data audit</td><td>🔄 In Progress</td></tr>
+      <tr><td>Compliance Health gap fix (FB-048, ~164 districts)</td><td>🔴 Prioritized</td></tr>
+    </table>
+  </div>
+</details>
+
+<!-- FINANCIAL -->
+<details class="section">
+  <summary>Financial Health <span class="tag reported">Carried May 27</span></summary>
+  <div class="section-content grid-2">
+    <table>
+      <tr><th>Metric</th><th class="amount">Value</th></tr>
+      <tr><td>Verified ARR</td><td class="amount">$439,880</td></tr>
+      <tr><td>Cash on Hand</td><td class="amount">$107,773</td></tr>
+      <tr><td>Accounts Payable</td><td class="amount">$210,429</td></tr>
+      <tr><td>Monthly Burn</td><td class="amount">~$115K</td></tr>
+    </table>
+    <div>
+      <h3 style="font-size:0.875rem;text-transform:uppercase;letter-spacing:0.04em;color:var(--ink-light);margin-bottom:12px;">Path to $1M</h3>
+      <table>
+        <tr><th>Scenario</th><th class="amount">Forecast</th></tr>
+        <tr><td>Banked (Closed Won)</td><td class="amount">$379K</td></tr>
+        <tr><td>Weighted Forecast</td><td class="amount">$739K</td></tr>
+        <tr><td>Best Case (pre-Sept)</td><td class="amount">$1,288K</td></tr>
+        <tr style="color:var(--amber);font-weight:700;"><td>Gap to $1M</td><td class="amount">$621K</td></tr>
+      </table>
+    </div>
+  </div>
+</details>
+
+<footer>
+  Bookmarked Inc. Board Dashboard · Confidential · Built for Charlie Clines ·
+  <a href="https://bookmarked-corp.github.io/bookmarked-board-dashboard/">bookmarked-corp.github.io/bookmarked-board-dashboard</a>
+</footer>
+
+</div>
+</body>
+</html>

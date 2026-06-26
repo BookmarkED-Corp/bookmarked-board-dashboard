@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bookmarked — Board Dashboard v4 · Brand Narrative</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rust: #B12A0A; --rust-bg: #FDF5F0; --teal: #12A38C; --teal-bg: #F0FAF8;
+  --ink: #101828; --ink-light: #475467; --paper: #FAF9F6; --white: #FFFFFF;
+  --border: #E8E4DF;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+
+.wrap { max-width: 1100px; margin: 0 auto; padding: 48px 32px; }
+
+/* Hero */
+.hero { margin-bottom: 56px; }
+.hero .eyebrow { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; color: var(--rust); margin-bottom: 12px; }
+.hero h1 { font-family: 'DM Serif Display', serif; font-size: 3.5rem; font-weight: 400; line-height: 1.1; margin-bottom: 12px; color: var(--ink); }
+.hero .sub { font-size: 1.1rem; color: var(--ink-light); max-width: 560px; }
+.hero .date { font-size: 0.85rem; color: var(--ink-light); margin-top: 16px; }
+
+/* Feature row */
+.feat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 56px; }
+.feat { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+.feat .num { font-family: 'DM Serif Display', serif; font-size: 2.5rem; line-height: 1; margin-bottom: 4px; }
+.feat .label { font-size: 0.95rem; font-weight: 600; }
+.feat .desc { font-size: 0.85rem; color: var(--ink-light); margin-top: 6px; }
+.feat.teal { border-top: 3px solid var(--teal); }
+.feat.rust { border-top: 3px solid var(--rust); }
+
+/* Story block */
+.story { margin-bottom: 56px; }
+.story h2 { font-family: 'DM Serif Display', serif; font-size: 1.75rem; font-weight: 400; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.story h2 .icon { font-size: 1.5rem; }
+.story p { color: var(--ink-light); font-size: 1rem; margin-bottom: 16px; max-width: 680px; }
+
+/* Table */
+.data-table { width: 100%; border-collapse: collapse; margin: 24px 0; background: var(--white); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.data-table th { text-align: left; padding: 14px 20px; background: #F9FAFB; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-light); }
+.data-table td { padding: 14px 20px; border-bottom: 1px solid #F2F4F7; font-size: 0.9rem; }
+.data-table .num { text-align: right; font-family: 'DM Mono', monospace; font-size: 0.85rem; }
+.data-table .highlight-row { background: var(--teal-bg); }
+
+/* Tags */
+.chip { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+.chip.green { background: #D1FAE5; color: #107569; }
+.chip.amber { background: #FEF3C7; color: #D97706; }
+.chip.rust { background: var(--rust-bg); color: var(--rust); }
+.chip.outline { background: transparent; border: 1px solid var(--border); color: var(--ink-light); }
+
+/* Quote card */
+.quote { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 32px; margin: 32px 0; }
+.quote blockquote { font-family: 'DM Serif Display', serif; font-size: 1.3rem; font-style: italic; color: var(--ink); margin: 0 0 8px 0; }
+.quote .attrib { font-size: 0.85rem; color: var(--ink-light); }
+
+/* Gap meter */
+.gap-meter { display: flex; gap: 0; margin: 16px 0; height: 32px; border-radius: 8px; overflow: hidden; }
+.gap-done { background: var(--teal); display: flex; align-items: center; padding-left: 16px; color: white; font-weight: 700; font-size: 0.8rem; }
+.gap-remain { background: var(--rust-bg); flex: 1; display: flex; align-items: center; padding-left: 16px; color: var(--rust); font-weight: 600; font-size: 0.8rem; }
+
+/* Footer */
+footer { border-top: 1px solid var(--border); padding-top: 32px; margin-top: 56px; display: flex; justify-content: space-between; color: var(--ink-light); font-size: 0.8rem; }
+footer a { color: var(--teal); text-decoration: none; }
+
+@media (max-width: 768px) { .hero h1 { font-size: 2.2rem; } .feat-row { grid-template-columns: 1fr; } }
+</style>
+<meta name="robots" content="noindex">
+</head>
+<body>
+<div class="wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="eyebrow">Board Dashboard · Week of June 27, 2026</div>
+  <h1>Bookmarked</h1>
+  <p class="sub">The renewals engine is starting. $140K committed across 13 districts — $98K recovered from free to paid. ESC 10 partnership greenlit. Product shipping at 63 tickets/week.</p>
+  <p class="date">For Charlie Clines · Data as of June 25, 2026</p>
+</div>
+
+<!-- FEATURE NUMBERS -->
+<div class="feat-row">
+  <div class="feat teal">
+    <div class="num">$140K</div>
+    <div class="label">Committed Renewals</div>
+    <div class="desc">13 districts · $98K recovered from free→paid · Midland ISD $77K</div>
+  </div>
+  <div class="feat rust">
+    <div class="num">81</div>
+    <div class="label">ESC 10 Districts</div>
+    <div class="desc">910K+ students · 3-phase partnership greenlit · Proposal delivered Jun 27</div>
+  </div>
+  <div class="feat">
+    <div class="num">$621K</div>
+    <div class="label">Gap to $1M</div>
+    <div class="desc">$379K banked · Weighted forecast $739K · Target end of September</div>
+  </div>
+</div>
+
+<!-- STORY: Renewals -->
+<div class="story">
+  <h2><span class="icon">📊</span> Revenue & Pipeline</h2>
+  <p>Two weeks of real pipeline movement since our last update. The V1 year-end review cycle is producing conversions — districts see their data, see the product works, and commit dollars for V2.</p>
+
+  <table class="data-table">
+    <tr><th>Net-New Texas — Top 5</th><th>Stage</th><th class="num">Amount</th></tr>
+    <tr><td>Garland ISD</td><td><span class="chip amber">Quote Sent</span></td><td class="num">$140,391</td></tr>
+    <tr><td>Cypress-Fairbanks ISD</td><td><span class="chip outline">Qualifying</span></td><td class="num">$107,190</td></tr>
+    <tr><td>Pearland ISD</td><td><span class="chip outline">DM Buy-In</span></td><td class="num">$50,000</td></tr>
+    <tr><td>Midlothian ISD</td><td><span class="chip outline">Qualifying</span></td><td class="num">$30,786</td></tr>
+    <tr><td>Northside ISD</td><td><span class="chip outline">DM Buy-In</span></td><td class="num">$25,000</td></tr>
+  </table>
+
+  <table class="data-table" style="margin-top:16px;">
+    <tr><th>26/27 Renewals — Committed</th><th>Close Date</th><th class="num">Amount</th></tr>
+    <tr class="highlight-row"><td>Midland ISD <span class="chip green">Free→Paid</span></td><td>Jul 15</td><td class="num">$77,409</td></tr>
+    <tr><td>Elgin ISD</td><td>Jul 31</td><td class="num">$18,402</td></tr>
+    <tr><td>San Marcos CISD <span class="chip green">Free→Paid</span></td><td>Jul 17</td><td class="num">$16,100</td></tr>
+    <tr><td>La Grange ISD</td><td>Jul 31</td><td class="num">$5,550</td></tr>
+    <tr><td>+ 7 more committed + 2 quoted</td><td></td><td class="num">$22,977</td></tr>
+  </table>
+
+  <div class="quote">
+    <blockquote>"The bigger story is the dashboard. $140K committed, $98K recovered — every dollar in the 'free→paid' column was $0 last year. Midland alone is 79% of conversion value."</blockquote>
+    <div class="attrib">— Jan Gilboy, CRO</div>
+  </div>
+</div>
+
+<!-- STORY: ESC 10 -->
+<div class="story">
+  <h2><span class="icon">🤝</span> ESC 10 Partnership</h2>
+  <p>On June 23 we met in-person at ESC Region 10 in Richardson with Shavannia Dash, Lori Aden, and Angela Ellis. They greenlit a three-phase partnership across their 81 districts and 910,000+ students — the largest ESC relationship we've built.</p>
+
+  <table class="data-table">
+    <tr><th>Phase</th><th>Timing</th><th>What</th></tr>
+    <tr><td><span class="chip rust">Phase 1</span></td><td>Now → Fall 2026</td><td>Sell Bookmarked + ESC 10-delivered PD — the beachhead</td></tr>
+    <tr><td><span class="chip rust">Phase 2</span></td><td>~January 2027</td><td>Layer AI librarian + AI PD onto existing districts</td></tr>
+    <tr><td><span class="chip rust">Phase 3</span></td><td>Future</td><td>ESC-10-owned AI librarian subscription product (~$100/district/mo)</td></tr>
+  </table>
+
+  <p>Co-op delivery model: ESC 10's instructional-services cooperative covers PD bundling. ESC 16 handles procurement plumbing only. Separate MOU for ESC 10. Proposal delivered June 27. Follow-up meeting July 29.</p>
+</div>
+
+<!-- STORY: Product -->
+<div class="story">
+  <h2><span class="icon">📚</span> Product & Book Intelligence</h2>
+  <p>The team is building at a steady pace — 63 tickets per week, 13 completed last week. Two meaningful ships: Restricted Books (student UI + admin controls) and Book Intelligence data live inside the order workflow.</p>
+  <p>Priya's product feedback system caught a compliance health gap affecting ~164 districts. Jan's deep-dive on Ferris ISD produced a <strong>District Insights Layer</strong> proposal — a five-score scorecard with peer benchmarking. This could become the product foundation for free-to-paid conversion at scale.</p>
+</div>
+
+<!-- STORY: Path to $1M -->
+<div class="story">
+  <h2><span class="icon">🎯</span> Path to $1M</h2>
+
+  <div class="gap-meter">
+    <div class="gap-done" style="width:37.9%">$379K Banked</div>
+    <div class="gap-remain">$621K Remaining</div>
+  </div>
+
+  <table class="data-table" style="margin-top:24px;">
+    <tr><th>Metric</th><th class="num">Value</th></tr>
+    <tr><td>Banked Revenue (Closed Won since Sep 2025)</td><td class="num">$379K</td></tr>
+    <tr><td>Weighted Pipeline (open × stage probability)</td><td class="num">$360K</td></tr>
+    <tr style="font-weight:700;"><td>Weighted Forecast</td><td class="num">$739K</td></tr>
+    <tr><td>Best Case (all pre-Sept closes at 100%)</td><td class="num">$1,288K</td></tr>
+    <tr style="color:var(--rust);"><td>Gap to $1M (banked basis)</td><td class="num" style="color:var(--rust);">$621K</td></tr>
+  </table>
+
+  <p style="font-size:0.85rem; margin-top:8px;"><span class="chip amber">Carried May 27</span> Financials from Michelle's May close — refresh pending. Cash ~$108K, A/P ~$210K, verified ARR $440K.</p>
+</div>
+
+<footer>
+  <span>Bookmarked Inc. · Board Dashboard · Confidential</span>
+  <span><a href="https://bookmarked-corp.github.io/bookmarked-board-dashboard/">bookmarked-corp.github.io/bookmarked-board-dashboard</a></span>
+</footer>
+
+</div>
+</body>
+</html>

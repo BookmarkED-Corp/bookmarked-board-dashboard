@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bookmarked — Board Dashboard v3 · Data Dense</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal: #12A38C; --teal-l: #E6F7F4; --rust: #B12A0A;
+  --ink: #101828; --ink-m: #344054; --ink-l: #667085;
+  --bg: #F8F9FB; --card: #FFFFFF; --border: #E4E7EC;
+  --g-up: #107569; --g-dn: #C0392B; --amber: #D97706;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); font-size: 0.8125rem; -webkit-font-smoothing: antialiased; }
+
+.dash { max-width: 1440px; margin: 0 auto; padding: 24px; }
+
+/* Top bar */
+.topbar { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.topbar h1 { font-family: 'DM Serif Display', serif; font-size: 1.3rem; font-weight: 400; }
+.topbar .meta { color: var(--ink-l); font-size: 0.75rem; }
+
+/* KPI strip */
+.kpi-strip { display: flex; gap: 1px; background: var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 20px; }
+.kpi { flex: 1; background: var(--card); padding: 12px 16px; min-width: 0; }
+.kpi .label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-l); font-weight: 700; margin-bottom: 2px; white-space: nowrap; }
+.kpi .val { font-family: 'DM Serif Display', serif; font-size: 1.4rem; line-height: 1.1; }
+.kpi .delta { font-size: 0.7rem; margin-top: 1px; }
+.kpi .delta.pos { color: var(--g-up); }
+.kpi .delta.neg { color: var(--g-dn); }
+.kpi .delta.neut { color: var(--ink-l); }
+
+/* Grid layout */
+.grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.panel { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.panel.wide { grid-column: span 2; }
+.panel.full { grid-column: 1 / -1; }
+.panel-header { padding: 14px 16px; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; display: flex; justify-content: space-between; align-items: center; }
+.panel-body { padding: 12px 16px; overflow-x: auto; }
+
+/* Compact tables */
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: 6px 8px; border-bottom: 2px solid var(--border); font-weight: 600; color: var(--ink-l); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+td { padding: 5px 8px; border-bottom: 1px solid #F2F4F7; font-size: 0.8rem; }
+tr:last-child td { border-bottom: none; }
+.num { text-align: right; font-family: 'DM Mono', monospace; font-size: 0.78rem; }
+.total-row { font-weight: 700; border-top: 2px solid var(--border); }
+.total-row td { padding-top: 8px; }
+
+/* Mini badges */
+.dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 4px; }
+.dot.g { background: var(--g-up); }
+.dot.y { background: var(--amber); }
+.dot.r { background: var(--g-dn); }
+
+/* Progress bar */
+.bar { height: 6px; border-radius: 3px; background: #F2F4F7; margin-top: 8px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; }
+.bar-fill.teal { background: var(--teal); }
+.bar-fill.amber { background: var(--amber); }
+
+/* Small text */
+.sm { font-size: 0.7rem; color: var(--ink-l); }
+.mono { font-family: 'DM Mono', monospace; }
+
+@media (max-width: 1100px) { .grid { grid-template-columns: 1fr 1fr; } .panel.wide { grid-column: span 2; } }
+@media (max-width: 700px) { .grid { grid-template-columns: 1fr; } .panel.wide { grid-column: span 1; } .kpi-strip { flex-wrap: wrap; } }
+</style>
+<meta name="robots" content="noindex">
+</head>
+<body>
+<div class="dash">
+
+<div class="topbar">
+  <h1>Bookmarked Inc. · Board Dashboard</h1>
+  <span class="meta">Week of Jun 27, 2026 · Data as of Jun 25 · For Charlie Clines</span>
+</div>
+
+<!-- KPI Strip -->
+<div class="kpi-strip">
+  <div class="kpi"><div class="label">Pipeline</div><div class="val">$998K</div><div class="delta neut">$561K new + $437K ren</div></div>
+  <div class="kpi"><div class="label">Committed</div><div class="val">$140K</div><div class="delta pos">↑ 13 deals this week</div></div>
+  <div class="kpi"><div class="label">Free→Paid</div><div class="val">$98K</div><div class="delta pos">↑ 5 districts</div></div>
+  <div class="kpi"><div class="label">Gap → $1M</div><div class="val">$621K</div><div class="delta neut">$379K banked</div></div>
+  <div class="kpi"><div class="label">CS Tickets</div><div class="val">3</div><div class="delta pos">0 escalated</div></div>
+  <div class="kpi"><div class="label">Tickets/wk</div><div class="val">63</div><div class="delta neut">13 completed</div></div>
+  <div class="kpi"><div class="label">Cash</div><div class="val">$108K</div><div class="delta neut">May 27 stale</div></div>
+</div>
+
+<!-- Row 1: Pipeline panels -->
+<div class="grid">
+  <div class="panel">
+    <div class="panel-header">Net-New Texas<span class="sm">25 deals · $561K</span></div>
+    <div class="panel-body">
+      <table>
+        <tr><th>District</th><th>Stage</th><th class="num">Amount</th></tr>
+        <tr><td>Garland ISD</td><td><span class="dot y"></span>Quote Sent</td><td class="num">$140,391</td></tr>
+        <tr><td>Cypress-Fairbanks</td><td><span class="dot y"></span>Qualifying</td><td class="num">$107,190</td></tr>
+        <tr><td>Pearland ISD</td><td><span class="dot y"></span>DM Buy-In</td><td class="num">$50,000</td></tr>
+        <tr><td>Midlothian ISD</td><td><span class="dot y"></span>Qualifying</td><td class="num">$30,786</td></tr>
+        <tr><td>Northside ISD</td><td><span class="dot y"></span>DM Buy-In</td><td class="num">$25,000</td></tr>
+        <tr class="total-row"><td>All stages (25)</td><td></td><td class="num">~$561K</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-header">26/27 Renewals<span class="sm">13 committed · $140K</span></div>
+    <div class="panel-body">
+      <table>
+        <tr><th>District</th><th>Close</th><th class="num">Amount</th></tr>
+        <tr><td>Midland ISD ⭐</td><td>Jul 15</td><td class="num">$77,409</td></tr>
+        <tr><td>Elgin ISD</td><td>Jul 31</td><td class="num">$18,402</td></tr>
+        <tr><td>San Marcos ⭐</td><td>Jul 17</td><td class="num">$16,100</td></tr>
+        <tr><td>La Grange ISD</td><td>Jul 31</td><td class="num">$5,550</td></tr>
+        <tr><td>Glen Rose ISD</td><td>Aug 31</td><td class="num">$4,186</td></tr>
+        <tr class="total-row"><td>11 commit + 2 quoted</td><td></td><td class="num">$140,438</td></tr>
+      </table>
+      <p class="sm" style="margin-top:8px;">⭐ = free→paid conversion ($98K of $140K)</p>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-header">Path to $1M</div>
+    <div class="panel-body">
+      <table>
+        <tr><td>Banked (Closed Won)</td><td class="num">$379K</td></tr>
+        <tr><td>+ Weighted Pipeline</td><td class="num">$360K</td></tr>
+        <tr style="font-weight:700;"><td>= Weighted Forecast</td><td class="num">$739K</td></tr>
+        <tr><td>Best Case (pre-Sept)</td><td class="num">$1,288K</td></tr>
+        <tr style="color:var(--amber);"><td>Gap to $1M</td><td class="num" style="color:var(--amber);">$621K</td></tr>
+      </table>
+      <div class="bar"><div class="bar-fill teal" style="width:37.9%;"></div></div>
+      <p class="sm" style="margin-top:4px;">37.9% of $1M banked</p>
+    </div>
+  </div>
+</div>
+
+<!-- Row 2: CS + Product -->
+<div class="grid" style="margin-top:16px;">
+  <div class="panel">
+    <div class="panel-header">Migration Pipeline<span class="sm">Patrick Reid</span></div>
+    <div class="panel-body">
+      <table>
+        <tr><th>Stage</th><th class="num">Count</th><th></th></tr>
+        <tr><td>Announced</td><td class="num">~30</td><td><span class="dot g"></span></td></tr>
+        <tr><td>Go-Live Verification</td><td class="num">6</td><td><span class="dot g"></span></td></tr>
+        <tr><td>V1 Sunset Complete</td><td class="num">2</td><td><span class="dot g"></span></td></tr>
+        <tr><td>Legacy Closed</td><td class="num">9</td><td><span class="dot g"></span></td></tr>
+      </table>
+      <p class="sm" style="margin-top:12px;">Support: 0 open · 0 escalated · hold_reason field live</p>
+    </div>
+  </div>
+  <div class="panel wide">
+    <div class="panel-header">Product Shipped<span class="sm">Last 2 weeks</span></div>
+    <div class="panel-body">
+      <table>
+        <tr><th>What</th><th>When</th><th>Status</th></tr>
+        <tr><td>Restricted Books support suite — student UI + admin controls</td><td>Jun 18</td><td><span class="dot g"></span>Live</td></tr>
+        <tr><td>Book Intelligence data in Orders workflow</td><td>Jun 11</td><td><span class="dot g"></span>Live</td></tr>
+        <tr><td>Staff Invite flow completed</td><td>Jun 11</td><td><span class="dot g"></span>Live</td></tr>
+        <tr><td>Order Workflow Phase 1 (Kanban + drag-and-drop)</td><td>Jun 25</td><td><span class="dot y"></span>Dev Review</td></tr>
+        <tr><td>Network Intelligence Phase 0</td><td>—</td><td><span class="dot y"></span>In Progress</td></tr>
+        <tr><td>Compliance Health gap (FB-048, ~164 districts)</td><td>Jun 25</td><td><span class="dot r"></span>Prioritized</td></tr>
+      </table>
+      <p class="sm" style="margin-top:8px;">Tickets: 63/wk avg · 13 completed last week · Priya: 12 new feedback entries, Compliance Health dominant</p>
+    </div>
+  </div>
+</div>
+
+<!-- Row 3: ESC 10 + Financials -->
+<div class="grid" style="margin-top:16px;">
+  <div class="panel wide">
+    <div class="panel-header">ESC 10 Partnership<span class="sm">Greenlit Jun 23 · Proposal due Jun 27</span></div>
+    <div class="panel-body">
+      <p style="margin-bottom:10px;">In-person meeting with Shavannia Dash, Lori Aden, Angela Ellis. Three-phase rollout across 81 districts / 910K+ students:</p>
+      <table>
+        <tr><th>Phase</th><th>Timing</th><th>What</th></tr>
+        <tr><td>1 — Beachhead</td><td>Now → Fall</td><td>Sell Bookmarked + ESC 10-delivered PD</td></tr>
+        <tr><td>2 — AI Layer</td><td>~January</td><td>AI librarian + AI PD for existing districts</td></tr>
+        <tr><td>3 — Product</td><td>Future</td><td>ESC-10-owned AI librarian subscription product</td></tr>
+      </table>
+      <p class="sm" style="margin-top:8px;">Co-op delivery model · ESC 16 = procurement only · ESC 10 = separate MOU · Follow-up July 29</p>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-header">Financials<span class="sm" style="color:var(--amber);">Stale — May 27</span></div>
+    <div class="panel-body">
+      <table>
+        <tr><td>Verified ARR</td><td class="num">$440K</td></tr>
+        <tr><td>Cash</td><td class="num">$108K</td></tr>
+        <tr><td>A/P</td><td class="num">$210K</td></tr>
+        <tr><td>Burn/mo</td><td class="num">~$115K</td></tr>
+        <tr><td>V1 savings/mo</td><td class="num">$8-9K</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

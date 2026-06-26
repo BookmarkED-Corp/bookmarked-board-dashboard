@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bookmarked — Board Dashboard v2 · Narrative Flow</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display:ital@0;1&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rust: #B12A0A; --teal: #12A38C; --teal-dark: #107569;
+  --ink: #101828; --ink-light: #475467; --bg: #FAFAF9;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+.letter { max-width: 760px; margin: 60px auto; padding: 0 24px; }
+
+/* Header */
+.letterhead { margin-bottom: 48px; }
+.letterhead h1 { font-family: 'DM Serif Display', serif; font-size: 3rem; font-weight: 400; line-height: 1.15; margin-bottom: 8px; }
+.letterhead .date { color: var(--ink-light); font-size: 0.9rem; }
+.letterhead .for { color: var(--teal); font-weight: 600; }
+
+/* Section */
+.section { margin-bottom: 48px; }
+.section h2 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; font-weight: 400; margin-bottom: 6px; color: var(--ink); }
+.section .rule { width: 40px; height: 3px; background: var(--teal); margin-bottom: 20px; }
+
+/* Big number */
+.big-num { font-family: 'DM Serif Display', serif; font-size: 2.5rem; color: var(--ink); line-height: 1.1; margin: 16px 0 4px; }
+.big-num.context { font-size: 1.2rem; color: var(--ink-light); margin-top: 0; font-family: 'DM Sans', sans-serif; }
+
+/* Story para */
+p { margin-bottom: 16px; color: var(--ink-light); font-size: 1rem; }
+
+/* Highlight box */
+.highlight { background: white; border-left: 4px solid var(--teal); padding: 20px 24px; margin: 24px 0; border-radius: 0 8px 8px 0; }
+.highlight .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: var(--teal); margin-bottom: 8px; }
+.highlight .value { font-family: 'DM Serif Display', serif; font-size: 1.5rem; }
+.highlight .note { font-size: 0.85rem; color: var(--ink-light); margin-top: 4px; }
+
+/* Small table */
+.mini-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 16px 0; }
+.mini-table td { padding: 8px 0; border-bottom: 1px solid #E4E7EC; }
+.mini-table .num { text-align: right; font-family: 'DM Mono', monospace; font-size: 0.85rem; }
+
+/* Inline badge */
+.badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+.badge.green { background: #D1FAE5; color: #107569; }
+.badge.amber { background: #FEF3C7; color: #D97706; }
+
+/* Footer */
+footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid #E4E7EC; color: #98A2B3; font-size: 0.8rem; }
+
+/* Em-dash bullets */
+ul.dash { list-style: none; padding: 0; margin: 16px 0; }
+ul.dash li { padding: 6px 0; color: var(--ink-light); }
+ul.dash li::before { content: '— '; color: var(--teal); font-weight: 600; }
+
+@media (max-width: 600px) { .letterhead h1 { font-size: 2rem; } }
+</style>
+<meta name="robots" content="noindex">
+</head>
+<body>
+<div class="letter">
+
+<div class="letterhead">
+  <p class="for">FOR CHARLIE CLINES</p>
+  <h1>Bookmarked<br>Board Dashboard</h1>
+  <p class="date">Week of June 27, 2026 · Data as of June 25</p>
+</div>
+
+<!-- REVENUE STORY -->
+<div class="section">
+  <h2>The renewals engine is starting</h2>
+  <div class="rule"></div>
+  <p>Thirteen districts have now committed to 26/27 renewals, representing $140K in booked or quote-sent revenue. The bigger story: <strong>$98K of that is recovered revenue</strong> — districts that were free, pilot, or lapsed last cycle are now paying.</p>
+
+  <div class="highlight">
+    <div class="label">Headline</div>
+    <div class="value">$140K committed renewals across 13 districts</div>
+    <div class="note">$98K recovered from free-to-paid · Midland ISD alone converted from $0 to $77K</div>
+  </div>
+
+  <table class="mini-table">
+    <tr><td>Midland ISD</td><td class="num">$77,409</td><td><span class="badge green">Committed</span></td><td>⭐ Free→Paid</td></tr>
+    <tr><td>Elgin ISD</td><td class="num">$18,402</td><td><span class="badge green">Committed</span></td><td></td></tr>
+    <tr><td>San Marcos CISD</td><td class="num">$16,100</td><td><span class="badge green">Committed</span></td><td>⭐ Free→Paid</td></tr>
+    <tr><td>La Grange ISD</td><td class="num">$5,550</td><td><span class="badge green">Committed</span></td><td></td></tr>
+    <tr><td>+ 7 more districts</td><td class="num">$23,577</td><td><span class="badge green">Committed</span></td><td></td></tr>
+    <tr style="font-weight:700;"><td>Total committed + quoted</td><td class="num">$140,438</td><td></td><td></td></tr>
+  </table>
+
+  <ul class="dash">
+    <li>89% of committed revenue targets July close dates — the month we make automatic</li>
+    <li>Fayetteville ($810) closes June 30 — verify</li>
+    <li>Bruceville-Eddy ($1,638) closes July 10</li>
+  </ul>
+</div>
+
+<!-- ESC 10 STORY -->
+<div class="section">
+  <h2>ESC 10 partnership is greenlit</h2>
+  <div class="rule"></div>
+  <p>We met in-person at ESC Region 10 in Richardson on June 23. Shavannia Dash, Lori Aden, and Angela Ellis bought into a three-phase rollout across their 81 districts and 910,000+ students. Phase 1 starts now — sell Bookmarked with ESC 10-delivered PD. Phase 2 layers AI tools in January. Phase 3 is an ESC-10-owned AI librarian product.</p>
+  <p>Proposal was delivered June 27. Follow-up meeting July 29. ESC 16 handles back-end procurement only; ESC 10 gets a separate MOU for PD, AI, and sales revenue.</p>
+</div>
+
+<!-- PRODUCT STORY -->
+<div class="section">
+  <h2>Product is shipping at 63 tickets per week</h2>
+  <div class="rule"></div>
+  <p>Restricted Books shipped — students now see a clear UI and district admins can manage access properly. Book Intelligence data is live inside the order workflow. The team is generating 63 tickets per week with 13 completed last week.</p>
+  <p>Priya's product feedback system caught a compliance health gap affecting ~164 districts (FB-048). Jan's deep-dive on Ferris ISD produced a District Insights Layer proposal — a five-score scorecard with peer benchmarking that could become the product spec for free-to-paid conversions.</p>
+</div>
+
+<!-- FINANCIAL STORY -->
+<div class="section">
+  <h2>The path to $1M</h2>
+  <div class="rule"></div>
+  <div class="big-num">$739K</div>
+  <div class="big-num context">weighted forecast against $1M end-of-September target</div>
+
+  <table class="mini-table">
+    <tr><td>Banked (Closed Won since Sep 1, 2025)</td><td class="num">$379K</td></tr>
+    <tr><td>Weighted pipeline (open × stage probability)</td><td class="num">$360K</td></tr>
+    <tr><td>Best case (all pre-Sept closes at 100%)</td><td class="num">$1,288K</td></tr>
+    <tr style="color:var(--rust);"><td>Gap to $1M (banked basis)</td><td class="num" style="color:var(--rust);">$621K</td></tr>
+  </table>
+
+  <p style="font-size:0.85rem;"><span class="badge amber">Carried May 27</span> Financials still from Michelle's May close — refresh pending. Cash ~$108K, A/P ~$210K, verified ARR $440K.</p>
+</div>
+
+<footer>
+  Bookmarked Inc. · Board Dashboard · Confidential · Built for Charlie Clines<br>
+  <a href="https://bookmarked-corp.github.io/bookmarked-board-dashboard/" style="color:var(--teal);">bookmarked-corp.github.io/bookmarked-board-dashboard</a>
+</footer>
+
+</div>
+</body>
+</html>
