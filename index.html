@@ -98,6 +98,33 @@ main { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
 a { color: var(--teal); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
+/* Board Intelligence iframe container */
+#di-cards { }
+#di-iframe-container { display: none; }
+#di-iframe-container.active { display: flex; flex-direction: column; height: calc(100vh - 140px); }
+#di-back {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--teal);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-bottom: 16px;
+  align-self: flex-start;
+  transition: background 0.15s;
+}
+#di-back:hover { background: var(--teal-bg); }
+#di-iframe {
+  flex: 1;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #fff;
+}
+
 /* Footer */
 footer { border-top: 1px solid var(--border); padding: 24px 32px; margin-top: 48px; display: flex; justify-content: space-between; color: var(--ink-light); font-size: 0.78rem; }
 
@@ -424,32 +451,37 @@ footer { border-top: 1px solid var(--border); padding: 24px 32px; margin-top: 48
     <h2>🏫 District Intelligence Dashboards</h2>
     <p>Five live dashboards tracking Texas school district activity — board minutes analysis, superintendent movement, IMTA funding, media sentiment, and individual district profiles. These are internal sales intelligence tools, also available in the Company Cockpit for the team.</p>
 
-    <div class="kpi-grid" style="margin-top:20px;">
-      <a href="https://bookmarked-district-intelligence.vercel.app/board-minutes" target="_blank" class="kpi-card" style="text-decoration:none; display:block;">
+    <div class="kpi-grid" id="di-cards" style="margin-top:20px;">
+      <div class="kpi-card" onclick="openDI('https://bookmarked-district-intelligence.vercel.app/board-minutes')" style="cursor:pointer;">
         <div class="kpi-val" style="font-size:1.2rem;">📋</div>
         <div class="kpi-label">Board Minutes</div>
         <div class="kpi-sub">District board meeting analysis · Keywords, patterns, book challenges</div>
-      </a>
-      <a href="https://bookmarked-district-intelligence.vercel.app/supt-movement" target="_blank" class="kpi-card" style="text-decoration:none; display:block;">
+      </div>
+      <div class="kpi-card" onclick="openDI('https://bookmarked-district-intelligence.vercel.app/supt-movement')" style="cursor:pointer;">
         <div class="kpi-val" style="font-size:1.2rem;">🔄</div>
         <div class="kpi-label">Superintendent Movement</div>
         <div class="kpi-sub">Track supt changes across Texas districts</div>
-      </a>
-      <a href="https://bookmarked-district-intelligence.vercel.app/imta-intelligence" target="_blank" class="kpi-card" style="text-decoration:none; display:block;">
+      </div>
+      <div class="kpi-card" onclick="openDI('https://bookmarked-district-intelligence.vercel.app/imta-intelligence')" style="cursor:pointer;">
         <div class="kpi-val" style="font-size:1.2rem;">💰</div>
         <div class="kpi-label">IMTA Funding</div>
         <div class="kpi-sub">Instructional Materials allotment tracking</div>
-      </a>
-      <a href="https://bookmarked-district-intelligence.vercel.app/media-intelligence" target="_blank" class="kpi-card" style="text-decoration:none; display:block;">
+      </div>
+      <div class="kpi-card" onclick="openDI('https://bookmarked-district-intelligence.vercel.app/media-intelligence')" style="cursor:pointer;">
         <div class="kpi-val" style="font-size:1.2rem;">📰</div>
         <div class="kpi-label">Media Intelligence</div>
         <div class="kpi-sub">News coverage, parent activism, vendor evaluations</div>
-      </a>
-      <a href="https://bookmarked-district-intelligence.vercel.app/district-profile" target="_blank" class="kpi-card" style="text-decoration:none; display:block;">
+      </div>
+      <div class="kpi-card" onclick="openDI('https://bookmarked-district-intelligence.vercel.app/district-profile')" style="cursor:pointer;">
         <div class="kpi-val" style="font-size:1.2rem;">🔍</div>
         <div class="kpi-label">District Profiles</div>
         <div class="kpi-sub">Individual district deep-dive profiles</div>
-      </a>
+      </div>
+    </div>
+
+    <div id="di-iframe-container">
+      <button id="di-back" onclick="closeDI()">← Back to Board Intelligence</button>
+      <iframe id="di-iframe" src="" allow="fullscreen"></iframe>
     </div>
   </div>
 
@@ -478,6 +510,22 @@ function showTab(tabId, btn) {
   document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
   document.getElementById('tab-' + tabId).classList.add('active');
   if (btn) btn.classList.add('active');
+  closeDI();
+}
+
+function openDI(url) {
+  document.getElementById('di-cards').style.display = 'none';
+  document.getElementById('di-iframe-container').classList.add('active');
+  document.getElementById('di-iframe').src = url;
+}
+
+function closeDI() {
+  var cards = document.getElementById('di-cards');
+  var container = document.getElementById('di-iframe-container');
+  var iframe = document.getElementById('di-iframe');
+  if (cards) cards.style.display = '';
+  if (container) container.classList.remove('active');
+  if (iframe) iframe.src = '';
 }
 </script>
 </body>
