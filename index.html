@@ -5,123 +5,267 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bookmarked — Chairman Cockpit</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&family=DM+Mono&display=swap" rel="stylesheet">
+<meta name="robots" content="noindex">
 <style>
 :root {
-  --rust: #B12A0A; --rust-bg: #FDF5F0; --teal: #12A38C; --teal-bg: #F0FAF8;
-  --ink: #101828; --ink-light: #475467; --paper: #FAF9F6; --white: #FFFFFF;
-  --border: #E8E4DF;
+  --rust: #B12A0A; --rust-bg: #FDF5F0;
+  --teal: #12A38C; --teal-bg: #F0FAF8;
+  --ink: #101828; --ink-light: #475467;
+  --paper: #FAF9F6; --white: #FFFFFF;
+  --border: #E8E4DF; --amber: #D97706;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; }
 
-.wrap { max-width: 1100px; margin: 0 auto; padding: 48px 32px; }
+/* Header */
+.header { background: var(--ink); padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: 56px; }
+.header .logo { font-family: 'DM Serif Display', serif; color: #fff; font-size: 1.2rem; letter-spacing: 0.02em; }
+.header .logo span { color: var(--teal); }
+.header .user { color: #94A3B8; font-size: 0.8rem; }
+
+/* Nav */
+nav { background: #fff; border-bottom: 1px solid var(--border); padding: 0 32px; display: flex; gap: 2px; position: sticky; top: 0; z-index: 10; }
+nav button { font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; padding: 14px 20px; border: none; background: none; color: var(--ink-light); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.15s; white-space: nowrap; }
+nav button:hover { color: var(--ink); }
+nav button.active { color: var(--teal); border-bottom-color: var(--teal); }
+
+/* Main */
+main { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
 
 /* Hero */
-.hero { margin-bottom: 56px; }
-.hero .eyebrow { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; color: var(--rust); margin-bottom: 12px; }
-.hero h1 { font-family: 'DM Serif Display', serif; font-size: 3.5rem; font-weight: 400; line-height: 1.1; margin-bottom: 12px; color: var(--ink); }
-.hero .sub { font-size: 1.1rem; color: var(--ink-light); max-width: 560px; }
-.hero .date { font-size: 0.85rem; color: var(--ink-light); margin-top: 16px; }
+.hero { margin-bottom: 48px; }
+.hero .eyebrow { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; color: var(--rust); margin-bottom: 8px; }
+.hero h1 { font-family: 'DM Serif Display', serif; font-size: 3rem; font-weight: 400; line-height: 1.1; margin-bottom: 12px; color: var(--ink); }
+.hero .sub { font-size: 1.05rem; color: var(--ink-light); max-width: 640px; line-height: 1.6; }
+.hero .date { font-size: 0.85rem; color: var(--ink-light); margin-top: 12px; }
 
 /* Feature row */
-.feat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 56px; }
-.feat { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
-.feat .num { font-family: 'DM Serif Display', serif; font-size: 2.5rem; line-height: 1; margin-bottom: 4px; }
-.feat .label { font-size: 0.95rem; font-weight: 600; }
-.feat .desc { font-size: 0.85rem; color: var(--ink-light); margin-top: 6px; }
+.feat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 48px; }
+.feat { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
+.feat .num { font-family: 'DM Serif Display', serif; font-size: 2rem; line-height: 1; margin-bottom: 4px; }
+.feat .label { font-size: 0.85rem; font-weight: 600; color: var(--ink-light); }
+.feat .desc { font-size: 0.8rem; color: var(--ink-light); margin-top: 4px; }
 .feat.teal { border-top: 3px solid var(--teal); }
 .feat.rust { border-top: 3px solid var(--rust); }
+.feat.amber { border-top: 3px solid var(--amber); }
 
 /* Story block */
-.story { margin-bottom: 56px; }
-.story h2 { font-family: 'DM Serif Display', serif; font-size: 1.75rem; font-weight: 400; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
-.story h2 .icon { font-size: 1.5rem; }
-.story p { color: var(--ink-light); font-size: 1rem; margin-bottom: 16px; max-width: 680px; }
+.story { margin-bottom: 48px; }
+.story h2 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; font-weight: 400; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.story p { color: var(--ink-light); font-size: 0.95rem; margin-bottom: 14px; max-width: 680px; }
 
-/* Table */
-.data-table { width: 100%; border-collapse: collapse; margin: 24px 0; background: var(--white); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-.data-table th { text-align: left; padding: 14px 20px; background: #F9FAFB; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-light); }
-.data-table td { padding: 14px 20px; border-bottom: 1px solid #F2F4F7; font-size: 0.9rem; }
-.data-table .num { text-align: right; font-family: 'DM Mono', monospace; font-size: 0.85rem; }
-.data-table .highlight-row { background: var(--teal-bg); }
+/* Tables */
+.data-table { width: 100%; border-collapse: collapse; margin: 16px 0; background: var(--white); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 0.88rem; }
+.data-table th { text-align: left; padding: 12px 16px; background: #F9FAFB; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-light); }
+.data-table td { padding: 12px 16px; border-bottom: 1px solid #F2F4F7; }
+.data-table .num { text-align: right; font-family: 'DM Mono', monospace; font-size: 0.82rem; }
+.data-table .hl { background: var(--teal-bg); }
+.data-table .warn { background: var(--rust-bg); }
 
-/* Tags */
-.chip { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+/* Chips */
+.chip { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
 .chip.green { background: #D1FAE5; color: #107569; }
 .chip.amber { background: #FEF3C7; color: #D97706; }
 .chip.rust { background: var(--rust-bg); color: var(--rust); }
 .chip.outline { background: transparent; border: 1px solid var(--border); color: var(--ink-light); }
+.chip.teal { background: var(--teal-bg); color: var(--teal); }
 
-/* Quote card */
-.quote { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 32px; margin: 32px 0; }
-.quote blockquote { font-family: 'DM Serif Display', serif; font-size: 1.3rem; font-style: italic; color: var(--ink); margin: 0 0 8px 0; }
-.quote .attrib { font-size: 0.85rem; color: var(--ink-light); }
+/* Quote */
+.quote { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 28px; margin: 24px 0; }
+.quote blockquote { font-family: 'DM Serif Display', serif; font-size: 1.15rem; font-style: italic; color: var(--ink); margin: 0 0 8px 0; }
+.quote .attrib { font-size: 0.82rem; color: var(--ink-light); }
 
 /* Gap meter */
-.gap-meter { display: flex; gap: 0; margin: 16px 0; height: 32px; border-radius: 8px; overflow: hidden; }
-.gap-done { background: var(--teal); display: flex; align-items: center; padding-left: 16px; color: white; font-weight: 700; font-size: 0.8rem; }
-.gap-remain { background: var(--rust-bg); flex: 1; display: flex; align-items: center; padding-left: 16px; color: var(--rust); font-weight: 600; font-size: 0.8rem; }
+.gap-meter { display: flex; gap: 0; margin: 16px 0; height: 36px; border-radius: 8px; overflow: hidden; }
+.gap-done { background: var(--teal); display: flex; align-items: center; padding-left: 16px; color: white; font-weight: 700; font-size: 0.85rem; }
+.gap-remain { background: var(--rust-bg); flex: 1; display: flex; align-items: center; padding-left: 16px; color: var(--rust); font-weight: 600; font-size: 0.85rem; }
+
+/* Section header for tabs */
+.section-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; }
+.section-header h2 { font-family: 'DM Serif Display', serif; font-size: 1.75rem; font-weight: 400; }
+.section-header .meta { font-size: 0.8rem; color: var(--ink-light); }
+
+/* KPI grid */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
+.kpi-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.kpi-card .kpi-val { font-family: 'DM Serif Display', serif; font-size: 1.6rem; margin-bottom: 2px; }
+.kpi-card .kpi-label { font-size: 0.8rem; color: var(--ink-light); font-weight: 600; }
+.kpi-card .kpi-sub { font-size: 0.75rem; color: var(--ink-light); margin-top: 4px; }
+
+/* Links */
+a { color: var(--teal); text-decoration: none; }
+a:hover { text-decoration: underline; }
 
 /* Footer */
-footer { border-top: 1px solid var(--border); padding-top: 32px; margin-top: 56px; display: flex; justify-content: space-between; color: var(--ink-light); font-size: 0.8rem; }
-footer a { color: var(--teal); text-decoration: none; }
+footer { border-top: 1px solid var(--border); padding: 24px 32px; margin-top: 48px; display: flex; justify-content: space-between; color: var(--ink-light); font-size: 0.78rem; }
 
-@media (max-width: 768px) { .hero h1 { font-size: 2.2rem; } .feat-row { grid-template-columns: 1fr; } }
+/* Responsive */
+@media (max-width: 900px) { .feat-row { grid-template-columns: repeat(2, 1fr); } nav button { font-size: 0.75rem; padding: 12px 12px; } }
+@media (max-width: 600px) { .feat-row { grid-template-columns: 1fr; } nav { overflow-x: auto; } }
 </style>
-<meta name="robots" content="noindex">
 </head>
 <body>
-<div class="wrap">
 
-<!-- HERO -->
-<div class="hero">
-  <div class="eyebrow">Chairman Cockpit · Week of June 27, 2026</div>
-  <h1>Bookmarked</h1>
-  <p class="sub">The renewals engine is starting. $140K committed across 13 districts — $98K recovered from free to paid. ESC 10 partnership greenlit. Product shipping at 63 tickets/week.</p>
-  <p class="date">For Charlie Clines · Data as of June 25, 2026</p>
+<div class="header">
+  <div class="logo">Bookmarked <span>Chairman Cockpit</span></div>
+  <div class="user">Charlie Clines · Confidential</div>
 </div>
 
-<!-- FEATURE NUMBERS -->
-<div class="feat-row">
-  <div class="feat teal">
-    <div class="num">$140K</div>
-    <div class="label">Committed Renewals</div>
-    <div class="desc">13 districts · $98K recovered from free→paid · Midland ISD $77K</div>
+<nav>
+  <button class="active" onclick="showTab('home', this)">Home</button>
+  <button onclick="showTab('sales', this)">Sales</button>
+  <button onclick="showTab('product', this)">Product</button>
+  <button onclick="showTab('cs', this)">Customer Success</button>
+  <button onclick="showTab('finance', this)">Financial</button>
+  <button onclick="showTab('intel', this)">Board Intelligence</button>
+</nav>
+
+<main>
+
+<!-- HOME TAB -->
+<div id="tab-home" class="tab-content active">
+  <div class="hero">
+    <div class="eyebrow">Chairman Cockpit · Week of June 29, 2026</div>
+    <h1>Bookmarked</h1>
+    <p class="sub">$131K in committed 26/27 renewals across 10 districts — Midland ISD leads at $77K. ESC 10 partnership greenlit across 81 districts and 910K+ students. Sales pipeline at $1.06M weighted. Product shipping at 63 tickets/week. Cash position tight at ~$108K — Series Seed in progress.</p>
+    <p class="date">For Charlie Clines · Data as of June 29, 2026 · Auto-refreshed daily</p>
   </div>
-  <div class="feat rust">
-    <div class="num">81</div>
-    <div class="label">ESC 10 Districts</div>
-    <div class="desc">910K+ students · 3-phase partnership greenlit · Proposal delivered Jun 27</div>
+
+  <div class="feat-row">
+    <div class="feat teal">
+      <div class="num">$131K</div>
+      <div class="label">Committed Renewals</div>
+      <div class="desc">10 districts · Midland $77K · Elgin $18K · San Marcos $16K</div>
+    </div>
+    <div class="feat amber">
+      <div class="num">$1.06M</div>
+      <div class="label">Weighted Pipeline</div>
+      <div class="desc">$379K banked + $682K weighted · Best case $1.29M</div>
+    </div>
+    <div class="feat rust">
+      <div class="num">$621K</div>
+      <div class="label">Gap to $1M</div>
+      <div class="desc">$379K banked · Weighted forecast $739K · Target Sep 30</div>
+    </div>
+    <div class="feat">
+      <div class="num">$108K</div>
+      <div class="label">Cash Position</div>
+      <div class="desc">May 31 close · Burn ~$115K/mo · A/P $210K · Series Seed open</div>
+    </div>
   </div>
-  <div class="feat">
-    <div class="num">$621K</div>
-    <div class="label">Gap to $1M</div>
-    <div class="desc">$379K banked · Weighted forecast $739K · Target end of September</div>
+
+  <div class="story">
+    <h2>📊 Pipeline at a Glance</h2>
+    <table class="data-table">
+      <tr><th>Pipeline</th><th class="num">Active Deals</th><th class="num">Open Value</th><th class="num">Weighted</th></tr>
+      <tr><td>New Business — Texas</td><td class="num">30</td><td class="num">$652K</td><td class="num">$82K</td></tr>
+      <tr><td>26/27 Renewals</td><td class="num">56</td><td class="num">$528K</td><td class="num">$226K</td></tr>
+      <tr class="hl"><td><strong>Total Weighted Pipeline</strong></td><td class="num">86</td><td class="num">$1.18M</td><td class="num"><strong>$308K</strong></td></tr>
+      <tr><td>+ Banked (Closed Won FY26)</td><td class="num"></td><td class="num">$379K</td><td class="num">$379K</td></tr>
+      <tr style="font-weight:700; border-top: 2px solid var(--border);"><td>Combined Forecast</td><td class="num"></td><td class="num"></td><td class="num">$687K</td></tr>
+    </table>
+
+    <div class="gap-meter">
+      <div class="gap-done" style="width:37.9%">$379K Banked</div>
+      <div class="gap-remain">$621K Remaining to $1M</div>
+    </div>
+  </div>
+
+  <div class="story">
+    <h2>🤝 ESC 10 Partnership — Greenlit</h2>
+    <p>June 23 in-person at ESC Region 10 with Shavannia Dash, Lori Aden, and Angela Ellis. Three-phase partnership greenlit across 81 districts and 910,000+ students — our largest ESC relationship. Proposal delivered June 27. Follow-up July 29.</p>
+    <table class="data-table">
+      <tr><th>Phase</th><th>Timing</th><th>What</th></tr>
+      <tr><td><span class="chip rust">Phase 1</span></td><td>Now → Fall 2026</td><td>Sell Bookmarked + ESC 10-delivered PD — the beachhead</td></tr>
+      <tr><td><span class="chip rust">Phase 2</span></td><td>~January 2027</td><td>Layer AI librarian + AI PD onto existing districts</td></tr>
+      <tr><td><span class="chip rust">Phase 3</span></td><td>Future</td><td>ESC-10-owned AI librarian subscription (~$100/district/mo)</td></tr>
+    </table>
+    <p>Co-op delivery: ESC 10 instructional-services cooperative covers PD bundling. ESC 16 handles procurement plumbing. Separate MOU for ESC 10.</p>
+  </div>
+
+  <div class="story">
+    <h2>⚠️ Risks & Standing Items</h2>
+    <table class="data-table">
+      <tr><th>Item</th><th>Status</th><th>Note</th></tr>
+      <tr><td>TechDome Arbitration</td><td><span class="chip amber">Ongoing</span></td><td>AAA case 750301-26-0002-7952 · No material update</td></tr>
+      <tr><td>Series Seed</td><td><span class="chip amber">In Progress</span></td><td>Scale Firm + Dave Frey · Open items pending</td></tr>
+      <tr><td>V1 Sunset</td><td><span class="chip green">On Track</span></td><td>June 30 target · $7-9K/mo savings on hosting</td></tr>
+      <tr><td>Cash Runway</td><td><span class="chip amber">Watch</span></td><td>~1 month at current burn · Series Seed needed</td></tr>
+      <tr><td>Customer Churn</td><td><span class="chip green">Low</span></td><td>No material churn risk · V1→V2 migration progressing</td></tr>
+    </table>
   </div>
 </div>
 
-<!-- STORY: Renewals -->
-<div class="story">
-  <h2><span class="icon">📊</span> Revenue & Pipeline</h2>
-  <p>Two weeks of real pipeline movement since our last update. The V1 year-end review cycle is producing conversions — districts see their data, see the product works, and commit dollars for V2.</p>
+<!-- SALES TAB -->
+<div id="tab-sales" class="tab-content">
+  <div class="section-header">
+    <h2>Sales Pipeline</h2>
+    <div class="meta">Live from HubSpot · Updated daily</div>
+  </div>
 
-  <table class="data-table">
-    <tr><th>Net-New Texas — Top 5</th><th>Stage</th><th class="num">Amount</th></tr>
-    <tr><td>Garland ISD</td><td><span class="chip amber">Quote Sent</span></td><td class="num">$140,391</td></tr>
-    <tr><td>Cypress-Fairbanks ISD</td><td><span class="chip outline">Qualifying</span></td><td class="num">$107,190</td></tr>
-    <tr><td>Pearland ISD</td><td><span class="chip outline">DM Buy-In</span></td><td class="num">$50,000</td></tr>
-    <tr><td>Midlothian ISD</td><td><span class="chip outline">Qualifying</span></td><td class="num">$30,786</td></tr>
-    <tr><td>Northside ISD</td><td><span class="chip outline">DM Buy-In</span></td><td class="num">$25,000</td></tr>
-  </table>
+  <div class="kpi-grid">
+    <div class="kpi-card" style="border-top:3px solid var(--teal);"><div class="kpi-val">$379K</div><div class="kpi-label">Banked Revenue</div><div class="kpi-sub">Closed Won since Sep 2025</div></div>
+    <div class="kpi-card" style="border-top:3px solid var(--amber);"><div class="kpi-val">$1.18M</div><div class="kpi-label">Active Pipeline</div><div class="kpi-sub">$652K net-new + $528K renewal</div></div>
+    <div class="kpi-card" style="border-top:3px solid var(--teal);"><div class="kpi-val">$308K</div><div class="kpi-label">Weighted Pipeline</div><div class="kpi-sub">Open deals × stage probability</div></div>
+    <div class="kpi-card" style="border-top:3px solid var(--rust);"><div class="kpi-val">$621K</div><div class="kpi-label">Gap to $1M</div><div class="kpi-sub">Target: September 30, 2026</div></div>
+    <div class="kpi-card"><div class="kpi-val">64</div><div class="kpi-label">Paid Districts</div><div class="kpi-sub">$440K verified ARR</div></div>
+  </div>
 
-  <table class="data-table" style="margin-top:16px;">
-    <tr><th>26/27 Renewals — Committed</th><th>Close Date</th><th class="num">Amount</th></tr>
-    <tr class="highlight-row"><td>Midland ISD <span class="chip green">Free→Paid</span></td><td>Jul 15</td><td class="num">$77,409</td></tr>
-    <tr><td>Elgin ISD</td><td>Jul 31</td><td class="num">$18,402</td></tr>
-    <tr><td>San Marcos CISD <span class="chip green">Free→Paid</span></td><td>Jul 17</td><td class="num">$16,100</td></tr>
-    <tr><td>La Grange ISD</td><td>Jul 31</td><td class="num">$5,550</td></tr>
-    <tr><td>+ 7 more committed + 2 quoted</td><td></td><td class="num">$22,977</td></tr>
-  </table>
+  <div class="story">
+    <h2>🏆 Net-New Texas — Top Active Deals</h2>
+    <table class="data-table">
+      <tr><th>District</th><th>Stage</th><th class="num">Amount</th><th>Close Date</th></tr>
+      <tr><td>Garland ISD</td><td><span class="chip amber">Quote Sent</span></td><td class="num">$140,391</td><td>Jul 31</td></tr>
+      <tr><td>Cypress-Fairbanks ISD</td><td><span class="chip outline">Qualifying</span></td><td class="num">$107,190</td><td>Aug 31</td></tr>
+      <tr><td>Pearland ISD</td><td><span class="chip outline">DM Buy-In</span></td><td class="num">$50,000</td><td>Jul 31</td></tr>
+      <tr><td>Midlothian ISD</td><td><span class="chip outline">Qualifying</span></td><td class="num">$30,786</td><td>—</td></tr>
+      <tr><td>Northside ISD</td><td><span class="chip outline">DM Buy-In</span></td><td class="num">$25,000</td><td>—</td></tr>
+      <tr><td>Conroe ISD</td><td><span class="chip green">Closed Won</span></td><td class="num">$206,785</td><td>Mar 31</td></tr>
+    </table>
+  </div>
+
+  <div class="story">
+    <h2>🔄 26/27 Renewals — Committed & Active</h2>
+    <table class="data-table">
+      <tr><th>District</th><th>Stage</th><th class="num">Amount</th><th>Close Date</th></tr>
+      <tr class="hl"><td>Midland ISD <span class="chip green">Free→Paid</span></td><td><span class="chip green">Committed</span></td><td class="num">$77,409</td><td>Jul 15</td></tr>
+      <tr class="hl"><td>Elgin ISD</td><td><span class="chip green">Committed</span></td><td class="num">$18,402</td><td>Jul 31</td></tr>
+      <tr class="hl"><td>San Marcos CISD <span class="chip green">Free→Paid</span></td><td><span class="chip green">Committed</span></td><td class="num">$16,100</td><td>Jul 17</td></tr>
+      <tr class="hl"><td>La Grange ISD</td><td><span class="chip green">Committed</span></td><td class="num">$5,550</td><td>Jul 31</td></tr>
+      <tr class="hl"><td>Glen Rose ISD</td><td><span class="chip green">Committed</span></td><td class="num">$4,186</td><td>Aug 31</td></tr>
+      <tr class="hl"><td>Presidio ISD</td><td><span class="chip green">Committed</span></td><td class="num">$2,844</td><td>Oct 1</td></tr>
+      <tr class="hl"><td>NTCA</td><td><span class="chip green">Committed</span></td><td class="num">$1,899</td><td>Aug 31</td></tr>
+      <tr class="hl"><td>Bruceville-Eddy ISD</td><td><span class="chip green">Committed</span></td><td class="num">$1,638</td><td>Jul 10</td></tr>
+      <tr class="hl"><td>Olney ISD</td><td><span class="chip green">Committed</span></td><td class="num">$1,288</td><td>Aug 31</td></tr>
+      <tr class="hl"><td>Midland Academy Charter</td><td><span class="chip green">Committed</span></td><td class="num">$1,176</td><td>Sep 1</td></tr>
+      <tr style="font-weight:700; border-top:2px solid var(--border);"><td><strong>10 Committed Districts</strong></td><td></td><td class="num"><strong>$130,492</strong></td><td></td></tr>
+    </table>
+    <p style="font-size:0.85rem; color:var(--ink-light);">+ Fayetteville $810 (Committed) · Childrens $2,700 (Quote Sent) · Alvarado $6,445 (Quote Sent) · Henrietta $2,691 (Quote Sent)</p>
+  </div>
+
+  <div class="story">
+    <h2>🔑 Key Renewals — In Progress</h2>
+    <table class="data-table">
+      <tr><th>District</th><th>Stage</th><th class="num">Amount</th><th>Close Date</th></tr>
+      <tr><td>Mesquite ISD</td><td><span class="chip outline">V2 Review</span></td><td class="num">$56,822</td><td>Jul 31</td></tr>
+      <tr><td>Humble ISD</td><td><span class="chip outline">Qualifying</span></td><td class="num">$72,386</td><td>Jul 31</td></tr>
+      <tr><td>ILTexas</td><td><span class="chip outline">Qualifying</span></td><td class="num">$42,326</td><td>Aug 31</td></tr>
+      <tr><td>Killeen ISD</td><td><span class="chip outline">Parked</span></td><td class="num">$39,073</td><td>Sep 30</td></tr>
+      <tr><td>Belton ISD</td><td><span class="chip outline">Parked</span></td><td class="num">$24,982</td><td>Sep 30</td></tr>
+    </table>
+    <p style="font-size:0.85rem; color:var(--ink-light);">Note: Killeen + Belton are parked until September board meetings. $64K combined — revisit after school start.</p>
+  </div>
+
+  <div class="story">
+    <h2>🚀 Out-of-State</h2>
+    <table class="data-table">
+      <tr><th>Deal</th><th>Stage</th><th class="num">Amount</th></tr>
+      <tr><td>Utah State Education Agency</td><td><span class="chip outline">Qualifying</span></td><td class="num">$1.31M</td></tr>
+    </table>
+    <p style="font-size:0.85rem; color:var(--ink-light);">Utah SEA is a long-cycle deal — FY27 budget, not counted in near-term pipeline. 3 real out-of-state deals total (7 in pipeline, 4 are junk).</p>
+  </div>
 
   <div class="quote">
     <blockquote>"The bigger story is the dashboard. $140K committed, $98K recovered — every dollar in the 'free→paid' column was $0 last year. Midland alone is 79% of conversion value."</blockquote>
@@ -129,54 +273,212 @@ footer a { color: var(--teal); text-decoration: none; }
   </div>
 </div>
 
-<!-- STORY: ESC 10 -->
-<div class="story">
-  <h2><span class="icon">🤝</span> ESC 10 Partnership</h2>
-  <p>On June 23 we met in-person at ESC Region 10 in Richardson with Shavannia Dash, Lori Aden, and Angela Ellis. They greenlit a three-phase partnership across their 81 districts and 910,000+ students — the largest ESC relationship we've built.</p>
-
-  <table class="data-table">
-    <tr><th>Phase</th><th>Timing</th><th>What</th></tr>
-    <tr><td><span class="chip rust">Phase 1</span></td><td>Now → Fall 2026</td><td>Sell Bookmarked + ESC 10-delivered PD — the beachhead</td></tr>
-    <tr><td><span class="chip rust">Phase 2</span></td><td>~January 2027</td><td>Layer AI librarian + AI PD onto existing districts</td></tr>
-    <tr><td><span class="chip rust">Phase 3</span></td><td>Future</td><td>ESC-10-owned AI librarian subscription product (~$100/district/mo)</td></tr>
-  </table>
-
-  <p>Co-op delivery model: ESC 10's instructional-services cooperative covers PD bundling. ESC 16 handles procurement plumbing only. Separate MOU for ESC 10. Proposal delivered June 27. Follow-up meeting July 29.</p>
-</div>
-
-<!-- STORY: Product -->
-<div class="story">
-  <h2><span class="icon">📚</span> Product & Book Intelligence</h2>
-  <p>The team is building at a steady pace — 63 tickets per week, 13 completed last week. Two meaningful ships: Restricted Books (student UI + admin controls) and Book Intelligence data live inside the order workflow.</p>
-  <p>Priya's product feedback system caught a compliance health gap affecting ~164 districts. Jan's deep-dive on Ferris ISD produced a <strong>District Insights Layer</strong> proposal — a five-score scorecard with peer benchmarking. This could become the product foundation for free-to-paid conversion at scale.</p>
-</div>
-
-<!-- STORY: Path to $1M -->
-<div class="story">
-  <h2><span class="icon">🎯</span> Path to $1M</h2>
-
-  <div class="gap-meter">
-    <div class="gap-done" style="width:37.9%">$379K Banked</div>
-    <div class="gap-remain">$621K Remaining</div>
+<!-- PRODUCT TAB -->
+<div id="tab-product" class="tab-content">
+  <div class="section-header">
+    <h2>Product & Engineering</h2>
+    <div class="meta">Source: Jira + Product Dashboard · Weekly refresh</div>
   </div>
 
-  <table class="data-table" style="margin-top:24px;">
-    <tr><th>Metric</th><th class="num">Value</th></tr>
-    <tr><td>Banked Revenue (Closed Won since Sep 2025)</td><td class="num">$379K</td></tr>
-    <tr><td>Weighted Pipeline (open × stage probability)</td><td class="num">$360K</td></tr>
-    <tr style="font-weight:700;"><td>Weighted Forecast</td><td class="num">$739K</td></tr>
-    <tr><td>Best Case (all pre-Sept closes at 100%)</td><td class="num">$1,288K</td></tr>
-    <tr style="color:var(--rust);"><td>Gap to $1M (banked basis)</td><td class="num" style="color:var(--rust);">$621K</td></tr>
-  </table>
+  <div class="kpi-grid">
+    <div class="kpi-card" style="border-top:3px solid var(--teal);"><div class="kpi-val">63</div><div class="kpi-label">Tickets / Week</div><div class="kpi-sub">Shipping velocity · 13 completed last week</div></div>
+    <div class="kpi-card" style="border-top:3px solid var(--teal);"><div class="kpi-val">2</div><div class="kpi-label">Major Ships</div><div class="kpi-sub">Restricted Books + BI in Orders</div></div>
+    <div class="kpi-card" style="border-top:3px solid var(--amber);"><div class="kpi-val">164</div><div class="kpi-label">Districts Flagged</div><div class="kpi-sub">Compliance health gap · Priya's audit</div></div>
+    <div class="kpi-card"><div class="kpi-val">44+</div><div class="kpi-label">BI Titles Enriched</div><div class="kpi-sub">Per week · +25 Summer Reading Sprint</div></div>
+  </div>
 
-  <p style="font-size:0.85rem; margin-top:8px;"><span class="chip amber">Carried May 27</span> Financials from Michelle's May close — refresh pending. Cash ~$108K, A/P ~$210K, verified ARR $440K.</p>
+  <div class="story">
+    <h2>📚 What Shipped Recently</h2>
+    <table class="data-table">
+      <tr><th>Feature</th><th>Status</th><th>Impact</th></tr>
+      <tr><td><strong>Restricted Books</strong></td><td><span class="chip green">Shipped</span></td><td>Student UI + admin controls for book restrictions — compliance-critical</td></tr>
+      <tr><td><strong>Book Intelligence in Orders</strong></td><td><span class="chip green">Shipped</span></td><td>Genre, reading levels, content ratings, risk badges inside order workflow — librarians see intelligence as they build lists</td></tr>
+      <tr><td><strong>Order Workflow Phase 1</strong></td><td><span class="chip green">Shipped</span></td><td>Streamlined ordering flow for librarians</td></tr>
+      <tr><td><strong>V1→V2 Migration</strong></td><td><span class="chip green">Active</span></td><td>26 districts in pipeline · 10 active · 4 at go-live · Patrick confident on June 30 deadline</td></tr>
+      <tr><td><strong>Network Intelligence</strong></td><td><span class="chip outline">Phase 0</span></td><td>Data audit running — cross-district pattern detection</td></tr>
+      <tr><td><strong>Google Analytics for V2</strong></td><td><span class="chip amber">Needs Owner</span></td><td>Must be assigned before school start</td></tr>
+    </table>
+  </div>
+
+  <div class="story">
+    <h2>🔬 District Insights Layer (Jan's Proposal)</h2>
+    <p>Jan's deep-dive on Ferris ISD produced a <strong>District Insights Layer</strong> proposal — a five-score scorecard with peer benchmarking. This could become the product foundation for free-to-paid conversion at scale. Districts see their compliance health, collection quality, and how they compare to peers. The pitch: "Here's what your data tells us — and here's what Bookmarked can do about it."</p>
+  </div>
+
+  <div class="story">
+    <h2>🏗️ SB13-Driven Work</h2>
+    <p>Texas Senate Bill 13 (curriculum transparency) continues to drive product development. Restricted Books and Book Intelligence are direct responses to compliance requirements. Priya's compliance health audit caught a gap affecting ~164 districts — the team is prioritizing this for the next sprint.</p>
+  </div>
 </div>
+
+<!-- CUSTOMER SUCCESS TAB -->
+<div id="tab-cs" class="tab-content">
+  <div class="section-header">
+    <h2>Customer Success</h2>
+    <div class="meta">Source: Atlas (CCSO Agent) · HubSpot · Weekly refresh</div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card" style="border-top:3px solid var(--teal);"><div class="kpi-val">0</div><div class="kpi-label">Open Support Tickets</div><div class="kpi-sub">557 closed total · 63 last 7 days</div></div>
+    <div class="kpi-card" style="border-top:3px solid var(--teal);"><div class="kpi-val">100%</div><div class="kpi-label">Support SLA</div><div class="kpi-sub">Within 4-hour window (Priya)</div></div>
+    <div class="kpi-card" style="border-top:3px solid var(--teal);"><div class="kpi-val">26</div><div class="kpi-label">Active Migrations</div><div class="kpi-sub">10 active · 16 scheduled · 4 at go-live</div></div>
+    <div class="kpi-card"><div class="kpi-val">64</div><div class="kpi-label">Paid Districts</div><div class="kpi-sub">$440K verified ARR</div></div>
+  </div>
+
+  <div class="story">
+    <h2>🔄 V1 → V2 Migration Status</h2>
+    <table class="data-table">
+      <tr><th>Stage</th><th class="num">Districts</th><th>Details</th></tr>
+      <tr><td>Complete</td><td class="num">1</td><td>First district fully migrated to V2</td></tr>
+      <tr class="hl"><td>Go-Live</td><td class="num">4</td><td>Dodd City, La Grange, Henrietta, Krum</td></tr>
+      <tr><td>Active Migration</td><td class="num">10</td><td>In progress with Patrick's team</td></tr>
+      <tr><td>Scheduled</td><td class="num">16</td><td>Queued for migration</td></tr>
+      <tr style="font-weight:700; border-top:2px solid var(--border);"><td>Total in Pipeline</td><td class="num">26</td><td>Target: all migrated by June 30</td></tr>
+    </table>
+    <p>Patrick's confident all remaining districts can move by end of June. Everyone migrates whether they've renewed or not. Renewed districts go live immediately; non-renewed get a grace window before access is sunset. V1 shutdown saves $7-9K/month in hosting costs.</p>
+  </div>
+
+  <div class="story">
+    <h2>📊 Renewal Health</h2>
+    <table class="data-table">
+      <tr><th>Segment</th><th class="num">Districts</th><th class="num">ARR</th><th>Status</th></tr>
+      <tr style="border-top:2px solid var(--border);"><td>Paid (Active)</td><td class="num">64</td><td class="num">$440K</td><td><span class="chip green">Healthy</span></td></tr>
+      <tr><td>Free/Pilot</td><td class="num">~18</td><td class="num">$0</td><td><span class="chip amber">Conversion Target</span></td></tr>
+      <tr><td>Churned (25/26)</td><td class="num">5</td><td class="num">$0</td><td><span class="chip rust">Lost</span></td></tr>
+      <tr><td>26/27 Committed</td><td class="num">10</td><td class="num">$130K</td><td><span class="chip green">Renewing</span></td></tr>
+    </table>
+    <p style="font-size:0.85rem; color:var(--ink-light);">$98K recovered from free-to-paid conversion. Free districts are the biggest untapped revenue pool — every one that converts is pure incremental ARR.</p>
+  </div>
+</div>
+
+<!-- FINANCIAL TAB -->
+<div id="tab-finance" class="tab-content">
+  <div class="section-header">
+    <h2>Financial Dashboard</h2>
+    <div class="meta">Source: Michelle Rogers · May 27, 2026 close · GAAP/Accrual basis</div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card" style="border-top:3px solid var(--teal);"><div class="kpi-val">$440K</div><div class="kpi-label">Verified ARR</div><div class="kpi-sub">64 paid districts · 44% of $1M target</div></div>
+    <div class="kpi-card" style="border-top:3px solid var(--rust);"><div class="kpi-val">$560K</div><div class="kpi-label">Gap to $1M ARR</div><div class="kpi-sub">Base case projects ~$705K by September</div></div>
+    <div class="kpi-card" style="border-top:3px solid var(--rust);"><div class="kpi-val">$108K</div><div class="kpi-label">Cash Balance</div><div class="kpi-sub">May 31 · ⚠️ Below forecast ($319K)</div></div>
+    <div class="kpi-card" style="border-top:3px solid var(--teal);"><div class="kpi-val">$203K</div><div class="kpi-label">Deferred Revenue</div><div class="kpi-sub">Cash already collected · Healthy</div></div>
+    <div class="kpi-card" style="border-top:3px solid var(--amber);"><div class="kpi-val">$115K</div><div class="kpi-label">Monthly Burn</div><div class="kpi-sub">~1 month runway at current cash</div></div>
+    <div class="kpi-card"><div class="kpi-val">$210K</div><div class="kpi-label">Accounts Payable</div><div class="kpi-sub">May 31</div></div>
+  </div>
+
+  <div class="story">
+    <h2>📈 Revenue Trend — Monthly Invoiced (GAAP)</h2>
+    <table class="data-table">
+      <tr><th>Month</th><th class="num">Invoiced</th><th>MoM Change</th><th class="num">Run Rate ARR</th></tr>
+      <tr><td>January</td><td class="num">$13,841</td><td>—</td><td class="num">$166K</td></tr>
+      <tr><td>February</td><td class="num">$14,774</td><td>+6.7%</td><td class="num">$177K</td></tr>
+      <tr><td>March</td><td class="num">$33,664</td><td>+127.8%</td><td class="num">$404K</td></tr>
+      <tr><td>April</td><td class="num">$33,829</td><td>+0.5%</td><td class="num">$406K</td></tr>
+      <tr><td>May</td><td class="num">$34,727</td><td>+2.7%</td><td class="num">$417K</td></tr>
+    </table>
+    <p style="font-size:0.85rem;">March step-change: Conroe ISD ($17,232/mo new MRR) · Revenue figures on GAAP/accrual (invoiced) basis per QBO</p>
+  </div>
+
+  <div class="story">
+    <h2>💰 YTD P&amp;L Summary (Jan–May 2026)</h2>
+    <table class="data-table">
+      <tr><th>Line Item</th><th class="num">YTD Actual</th><th class="num">YTD Forecast</th><th class="num">Variance</th></tr>
+      <tr><td>Total Revenue</td><td class="num">$130,835</td><td class="num">$86,951</td><td class="num" style="color:var(--teal);">+$43,884</td></tr>
+      <tr><td>Gross Profit</td><td class="num">$78,242</td><td class="num">$34,951</td><td class="num" style="color:var(--teal);">+$43,291</td></tr>
+      <tr><td>Total OpEx</td><td class="num">$600,629</td><td class="num">$448,336</td><td class="num" style="color:var(--rust);">+$152,293</td></tr>
+      <tr style="font-weight:700; border-top:2px solid var(--border);"><td>Net Operating Income</td><td class="num" style="color:var(--rust);">($522,387)</td><td class="num" style="color:var(--rust);">($413,385)</td><td class="num" style="color:var(--rust);">−$109,002</td></tr>
+    </table>
+  </div>
+
+  <div class="story">
+    <h2>⚠️ G&amp;A Spike Analysis — May 2026</h2>
+    <table class="data-table">
+      <tr><th>Item</th><th class="num">Amount</th><th>Type</th></tr>
+      <tr><td>Legal fees</td><td class="num">$10,278</td><td><span class="chip rust">Legal</span></td></tr>
+      <tr><td>Professional fees</td><td class="num">$7,650</td><td><span class="chip outline">One-time</span></td></tr>
+      <tr><td>Business insurance</td><td class="num">$4,205</td><td><span class="chip outline">Annual</span></td></tr>
+      <tr><td>Staff wages (G&amp;A)</td><td class="num">$12,800</td><td><span class="chip outline">Recurring</span></td></tr>
+      <tr><td>Mgmt consulting</td><td class="num">$5,000</td><td><span class="chip outline">Recurring</span></td></tr>
+      <tr><td>SaaS + other</td><td class="num">$6,376</td><td><span class="chip outline">Recurring</span></td></tr>
+      <tr style="font-weight:700; border-top:2px solid var(--border);"><td>Total May G&amp;A</td><td class="num">$46,309</td><td></td></tr>
+    </table>
+    <p style="font-size:0.85rem;">Normalised run rate: ~$26K–$28K/mo. Legal/professional fees should reduce once seed closes. May was an outlier — $46K vs. ~$25K normal.</p>
+  </div>
+
+  <div class="story">
+    <h2>📋 Full Financial Dashboard</h2>
+    <p>Complete financials with 11 tabs (Company Scorecard, Executive Summary, Forecast vs. Actuals, Pipeline &amp; Trends, Renewal Tracker, Balance Sheet, Cash Flow, A/P Aging, Deferred, Seed Round, Actions) available at:</p>
+    <p><a href="https://bookmarked-corp.github.io/bookmarked-financial-dashboard/" target="_blank">bookmarked-corp.github.io/bookmarked-financial-dashboard →</a></p>
+  </div>
+</div>
+
+<!-- BOARD INTELLIGENCE TAB -->
+<div id="tab-intel" class="tab-content">
+  <div class="section-header">
+    <h2>Board Intelligence</h2>
+    <div class="meta">District-level intelligence for strategic decisions</div>
+  </div>
+
+  <div class="story">
+    <h2>🏫 District Intelligence Dashboards</h2>
+    <p>Five live dashboards tracking Texas school district activity — board minutes analysis, superintendent movement, IMTA funding, media sentiment, and individual district profiles. These are internal sales intelligence tools, also available in the Company Cockpit for the team.</p>
+
+    <div class="kpi-grid" style="margin-top:20px;">
+      <a href="https://bookmarked-district-intelligence.vercel.app/board-minutes" target="_blank" class="kpi-card" style="text-decoration:none; display:block;">
+        <div class="kpi-val" style="font-size:1.2rem;">📋</div>
+        <div class="kpi-label">Board Minutes</div>
+        <div class="kpi-sub">District board meeting analysis · Keywords, patterns, book challenges</div>
+      </a>
+      <a href="https://bookmarked-district-intelligence.vercel.app/supt-movement" target="_blank" class="kpi-card" style="text-decoration:none; display:block;">
+        <div class="kpi-val" style="font-size:1.2rem;">🔄</div>
+        <div class="kpi-label">Superintendent Movement</div>
+        <div class="kpi-sub">Track supt changes across Texas districts</div>
+      </a>
+      <a href="https://bookmarked-district-intelligence.vercel.app/imta-intelligence" target="_blank" class="kpi-card" style="text-decoration:none; display:block;">
+        <div class="kpi-val" style="font-size:1.2rem;">💰</div>
+        <div class="kpi-label">IMTA Funding</div>
+        <div class="kpi-sub">Instructional Materials allotment tracking</div>
+      </a>
+      <a href="https://bookmarked-district-intelligence.vercel.app/media-intelligence" target="_blank" class="kpi-card" style="text-decoration:none; display:block;">
+        <div class="kpi-val" style="font-size:1.2rem;">📰</div>
+        <div class="kpi-label">Media Intelligence</div>
+        <div class="kpi-sub">News coverage, parent activism, vendor evaluations</div>
+      </a>
+      <a href="https://bookmarked-district-intelligence.vercel.app/district-profile" target="_blank" class="kpi-card" style="text-decoration:none; display:block;">
+        <div class="kpi-val" style="font-size:1.2rem;">🔍</div>
+        <div class="kpi-label">District Profiles</div>
+        <div class="kpi-sub">Individual district deep-dive profiles</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="story">
+    <h2>🔑 Key Intel This Week</h2>
+    <table class="data-table">
+      <tr><th>Signal</th><th>Source</th><th>Relevance</th></tr>
+      <tr><td>ESC 10 Partnership Greenlit</td><td><span class="chip green">In-Person</span></td><td>81 districts · 910K students · 3-phase delivery model</td></tr>
+      <tr><td>Garland ISD $2.17M IMTA Found</td><td><span class="chip amber">HubSpot</span></td><td>Massive IMTA budget — anchor deal potential</td></tr>
+      <tr><td>SB13 Compliance Wave</td><td><span class="chip rust">Legislative</span></td><td>Curriculum transparency driving product demand state-wide</td></tr>
+      <tr><td>District Insights Layer Proposal</td><td><span class="chip outline">Internal</span></td><td>Ferris ISD deep-dive → scalable conversion model</td></tr>
+    </table>
+  </div>
+</div>
+
+</main>
 
 <footer>
-  <span>Bookmarked Inc. · Chairman Cockpit · Confidential — Charlie Clines Only</span>
-  <span><a href="https://bookmarked-corp.github.io/bookmarked-board-dashboard/">bookmarked-corp.github.io/bookmarked-board-dashboard</a></span>
+  <span>Bookmarked Inc. · Chairman Cockpit · Confidential — Charlie Clines Only · Auto-refreshed daily from live data sources</span>
+  <span><a href="#" onclick="showTab('home', document.querySelector('nav button'))">Home</a> · <a href="https://founder-cockpit-personal.vercel.app">Founder Cockpit</a></span>
 </footer>
 
-</div>
+<script>
+function showTab(tabId, btn) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+</script>
 </body>
 </html>
